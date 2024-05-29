@@ -11,6 +11,6 @@ class Person:
         self.person_phone = person_phone
         self.organization = organization
 
-    def get_org_details(self):
+    def get_person_details(self):
         return (f"Person {self.person_id}, {self.person_name}, {self.person_surname}, {self.person_email}, "
                 f"{self.person_phone}")
