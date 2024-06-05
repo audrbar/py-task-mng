@@ -10,4 +10,4 @@ class Person:
         self.person_email = person_email
 
     def get_person_details(self):
-        return f"Person {self.person_fullname}, {self.person_email}, (Id: {self.person_id})."
+        return f"Details: {self.person_fullname}, {self.person_email}, (Id: {self.person_id})."

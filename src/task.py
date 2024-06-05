@@ -1,18 +1,22 @@
 class Task:
+    tasks = []
     def __init__(self, task_id: str, task_name: str, start_date: str, due_date: str, status='pending'):
         self.task_id = task_id
         self.task_name = task_name
         self.start_date = start_date
         self.due_date = due_date
         self.status = status
-        self.tasks = []
         self.assignees = []
-        self.tasks.append(self)
+        Task.tasks.append(self)
         print(f"Success. Task {self.task_name} was created.")
 
     def add_assignee(self, assignee):
         self.assignees.append(assignee)
         print(f"Success. Assignee {assignee} to the task {self.task_id} was added.")
+
+    def change_task_status(self, new_status):
+        self.status = new_status
+        print(f"Success. Task {self.task_id} status was changed to {self.status}.")
 
     def get_task_details(self):
         return (f"Task {self.task_id}, {self.task_name}, {self.start_date}, {self.due_date}, {self.status},"
