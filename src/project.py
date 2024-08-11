@@ -24,14 +24,17 @@ class Project:
         Project.tasks.append(task)
         print(f"The task {task} was to the project {self.project_id} added.")
 
-    def get_project_tasks(self):
+    @staticmethod
+    def get_project_tasks():
         for task in Project.tasks:
             return f"{task.__dict__}"
 
-    def get_project_managers(self):
+    @staticmethod
+    def get_project_managers():
         for manager in Project.managers:
             return f"{manager.__dict__}"
 
     def get_project_details(self):
-        return (f"-------------\nProject Id {self.project_id}\nName: {self.project_name}\nAim: {self.project_aim}\n"
-                f"Budget: {self.project_budget}\nManager: {self.get_project_managers()}\nTasks: {self.get_project_tasks()}.")
+        return (f"-------------\nProject Id {self.project_id}\nName: {self.project_name}\n"
+                f"Aim: {self.project_aim}\nBudget: {self.project_budget}\n"
+                f"Manager: {self.get_project_managers()}\nTasks: {self.get_project_tasks()}.")

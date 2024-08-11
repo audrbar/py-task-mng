@@ -1,5 +1,6 @@
 class Task:
     tasks = []
+
     def __init__(self, task_id: str, task_name: str, start_date: str, due_date: str, status='pending'):
         self.task_id = task_id
         self.task_name = task_name
