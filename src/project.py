@@ -1,40 +1,23 @@
-from task import Task
-from manager import Manager
+from sqlalchemy import Column, Integer, String, ForeignKey, Float
+from sqlalchemy.orm import Relationship
+
+from src.base import TimeStampedModel
 
 
-class Project:
-    tasks = []
-    managers = []
+class Project(TimeStampedModel):
+    __tablename__ = "projects"
 
-    def __init__(self, project_id: str, project_name: str, project_aim: str, project_budget: int, *task: Task,
-                 **manager: Manager):
-        self.project_id = project_id
-        self.project_name = project_name
-        self.project_aim = project_aim
-        self.project_budget = project_budget
-        self.manager = manager
-        self.task = task
-        print(f"Success. Project {self.project_name} was created.")
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    project_name = Column(String(80), nullable=False)
+    project_aim = Column(String(80), nullable=False)
+    project_budget = Column(Float, nullable=False)
+    person_id = Column(Integer, ForeignKey("persons.id"), nullable=True, index=True)
 
-    def add_manager(self, manager):
-        Project.managers.append(manager)
-        print(f"The manager {manager} was to the project {self.project_id} assigned.")
+    # one person to one project
+    person = Relationship("Person", back_populates="project")
+    # one project to many tasks
+    tasks = Relationship("Task", back_populates="project", passive_deletes=False)
 
-    def add_task(self, task):
-        Project.tasks.append(task)
-        print(f"The task {task} was to the project {self.project_id} added.")
-
-    @staticmethod
-    def get_project_tasks():
-        for task in Project.tasks:
-            return f"{task.__dict__}"
-
-    @staticmethod
-    def get_project_managers():
-        for manager in Project.managers:
-            return f"{manager.__dict__}"
-
-    def get_project_details(self):
-        return (f"-------------\nProject Id {self.project_id}\nName: {self.project_name}\n"
-                f"Aim: {self.project_aim}\nBudget: {self.project_budget}\n"
-                f"Manager: {self.get_project_managers()}\nTasks: {self.get_project_tasks()}.")
+    def __repr__(self):
+        return (f"{self.__class__.__name__}, id: {self.id}, name: {self.project_name}, aim: {self.project_aim}, "
+                f"budget: {self.project_budget}")

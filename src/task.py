@@ -1,28 +1,25 @@
-class Task:
-    tasks = []
+from sqlalchemy import Column, Integer, String, ForeignKey, Date
+from sqlalchemy.orm import Relationship
 
-    def __init__(self, task_id: str, task_name: str, start_date: str, due_date: str, status='pending'):
-        self.task_id = task_id
-        self.task_name = task_name
-        self.start_date = start_date
-        self.due_date = due_date
-        self.status = status
-        self.assignees = []
-        Task.tasks.append(self)
-        print(f"Success. Task {self.task_name} was created.")
+from src.base import TimeStampedModel
 
-    def add_assignee(self, assignee):
-        self.assignees.append(assignee)
-        print(f"Success. Assignee {assignee} to the task {self.task_id} was added.")
 
-    def change_task_status(self, new_status):
-        self.status = new_status
-        print(f"Success. Task {self.task_id} status was changed to {self.status}.")
+class Task(TimeStampedModel):
+    __tablename__ = "tasks"
 
-    def get_task_details(self):
-        return (f"Task {self.task_id}, {self.task_name}, {self.start_date}, {self.due_date}, {self.status},"
-                f" {self.assignees}")
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    task_name = Column(String(80), nullable=False)
+    start_date = Column(Date, nullable=False)
+    due_date = Column(Date, nullable=False)
+    done_date = Column(Date, nullable=True)
+    status = Column(String(80), nullable=False)
+    project_id = Column(Integer, ForeignKey("projects.id"), nullable=False, index=True)  # one to many tasks
 
-    def get_tasks(self):
-        for task in self.tasks:
-            return f"Task: {task.task_id}, {task.task_name}, {task.status}, {task.assignees}."
+    # many tasks to many users
+    persons = Relationship("Person", secondary="person_tasks", back_populates="tasks", passive_deletes=True)
+    # one project to many tasks
+    project = Relationship("Project", back_populates="tasks")
+
+    def __repr__(self):
+        return (f"{self.__class__.__name__}, id: {self.id}, name: {self.task_name}, start date: {self.start_date}, "
+                f"due date: {self.due_date}, status: {self.status}")
