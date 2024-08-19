@@ -34,6 +34,7 @@ class TimeStampedModel(Model):
             Automatically updated to the current date and time whenever the record is updated.
     """
     __abstract__ = True
+    __allow_unmapped__ = True
 
     created_at = Column(DateTime, default=datetime.now())
     updated_at = Column(DateTime, onupdate=datetime.now())

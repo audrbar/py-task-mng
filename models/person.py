@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Float
 from sqlalchemy.orm import Relationship
 
-from src.base import TimeStampedModel
+from models.base import TimeStampedModel
 
 
 class Person(TimeStampedModel):

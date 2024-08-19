@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, ForeignKey
 
-from src.base import TimeStampedModel
+from models.base import TimeStampedModel
 
 
 class PersonTask(TimeStampedModel):

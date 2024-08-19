@@ -2,12 +2,7 @@ import streamlit as st
 import streamlit_lottie as lto
 import requests
 from datetime import datetime
-from components.header import header_section
-from src.base import db_engine, Model
-from src.person import Person
-from src.project import Project
-from src.task import Task
-from src.persontasks import PersonTask
+from src.utilities import header_section
 
 
 def page_config() -> None:

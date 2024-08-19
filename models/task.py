@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Date
 from sqlalchemy.orm import Relationship
 
-from src.base import TimeStampedModel
+from models.base import TimeStampedModel
 
 
 class Task(TimeStampedModel):
@@ -21,5 +21,4 @@ class Task(TimeStampedModel):
     project = Relationship("Project", back_populates="tasks")
 
     def __repr__(self):
-        return (f"{self.__class__.__name__}, id: {self.id}, name: {self.task_name}, start date: {self.start_date}, "
-                f"due date: {self.due_date}, status: {self.status}")
+        return f"<Task(id={self.id}, name: {self.task_name})>"

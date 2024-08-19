@@ -91,20 +91,20 @@ class DBEngine:
         self.Session.remove()
         print("\nSession closed. That is it.")
 
-
-@event.listens_for(Engine, "connect")
-def event_listener(dbapi_connection, connection_record):
-    """
-    Event listener that sets session parameters when a new database connection is established.
-
-    This listener sets the time zone to 'Europe/Vilnius' for each new connection. It is executed
-    automatically whenever a connection is made using the SQLAlchemy engine.
-    Args:
-        dbapi_connection: The database API connection object.
-        connection_record: The connection record associated with the event.
-    """
-    tz = pytz.timezone('Europe/Vilnius')
-    cursor = dbapi_connection.cursor()
-    cursor.execute(f"SET TIME ZONE '{tz}'")
-    cursor.close()
-    print('Session parameters set on connection.')
+#
+# @event.listens_for(Engine, "connect")
+# def event_listener(dbapi_connection, connection_record):
+#     """
+#     Event listener that sets session parameters when a new database connection is established.
+#
+#     This listener sets the time zone to 'Europe/Vilnius' for each new connection. It is executed
+#     automatically whenever a connection is made using the SQLAlchemy engine.
+#     Args:
+#         dbapi_connection: The database API connection object.
+#         connection_record: The connection record associated with the event.
+#     """
+#     tz = pytz.timezone('Europe/Vilnius')
+#     cursor = dbapi_connection.cursor()
+#     cursor.execute(f"SET TIME ZONE '{tz}'")
+#     cursor.close()
+#     print('Session parameters set on connection.')

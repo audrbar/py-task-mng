@@ -2,7 +2,7 @@ from src.base import db_engine, session, Model
 from src.person import Person
 from src.project import Project
 from src.task import Task
-from src.persontasks import PersonTask
+from models.persontasks import PersonTask
 from dummy_data import persons_list, projects_list, tasks_list, person_tasks_list
 
 

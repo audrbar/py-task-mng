@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Float, Date
 from sqlalchemy.orm import Relationship
 
-from src.base import TimeStampedModel, Model
+from models.base import TimeStampedModel, Model
 
 
 class Person(TimeStampedModel):
@@ -34,10 +34,10 @@ class Project(TimeStampedModel):
     # one person to one project
     person = Relationship("Person", back_populates="project")
     # one project to many tasks
-    tasks = Relationship("Task", back_populates="project", passive_deletes=False)
+    tasks = Relationship("Task", back_populates="project", passive_deletes=False)  # one to many tasks
 
     def __repr__(self):
-        return f"{self.__class__.__name__}, name: {self.project_name}"
+        return f"<Project({self.id}, name: {self.project_name})>"
 
 
 class Task(TimeStampedModel):
@@ -57,7 +57,7 @@ class Task(TimeStampedModel):
     project = Relationship("Project", back_populates="tasks")
 
     def __repr__(self):
-        return f"{self.__class__.__name__}, name: {self.task_name}"
+        return f"<Task(id={self.id}, name: {self.task_name})>"
 
 
 class PersonTask(TimeStampedModel):
