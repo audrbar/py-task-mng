@@ -64,14 +64,17 @@ For testing purposes the initial data set may be used:
 |-----------------|---------------------------------------|-------------------------------|
 | initial_data.py | Some Demo Data for Project Management | [LINK](./src/initial_data.py) |
 ## Class Diagram
-Class Diagram was used to orchestrate the classes:
-![Class Diagram](./data/class_diagram.png)
+Class Diagram was used to design the classes:
+![Class Diagram](./img/class_diagram.png)
 ## DataBase Diagram
-Database Diagram was used to construct the database structure:
-![Database Diagram](./data/db-diagram.png)
+Database Diagram was used to design the database structure:
+![Database Diagram](img/db_diagram.png)
 ## Running tests
-_There are tests writen for connection testing in [test directory](./data/test_conn.py). You can run it in console by command:_
-`pytest`
+There are tests writen for connection testing in [test directory](./data/test_conn.py).
+You can run it in console by command:
+```
+pytest
+```
 ## Project status
 Way forward:
 - Improve Error handling.
