@@ -1,61 +1,50 @@
-import streamlit as st
-from sqlalchemy import desc
+"""
+This File Serves Dashboard page.
+"""
 
-from Home import footer_section
-from models.person import Person
-from models.project import Project
-from models.task import Task
-from models.persontasks import PersonTask
-from src.utilities import header_section
-
-
-def metrics_section(number_of_projects, number_of_tasks, number_of_tasks_in_progres, number_of_tasks_done,
-                    number_of_persons) -> None:
-    with st.container():
-        st.divider()
-        col1, col2, col3, col4, col5= st.columns(5)
-        col1.metric("Projects count", f"{number_of_projects}", "1")
-        col2.metric("Tasks count", f"{number_of_tasks}", "-1")
-        col3.metric("Tasks in progress", f"{number_of_tasks_in_progres}", "2")
-        col4.metric("Tasks done", f"{number_of_tasks_done}", "0")
-        col5.metric("Our Team", f"{number_of_persons}", "-1")
-
-
-def charts_section(some_data) -> None:
-    with st.container():
-        st.divider()
-        st.write("Your chart goes here.")
-        st.bar_chart(some_data)
+from components.chart_section import chart_section
+from components.metrics_section import metrics_section
+from src.base import session
+from src.utilities import header_section, footer_section
 
 
 def main():
-    header_section("Dashboard", "Find Team Workflow Cool Statistics.")
-    number_of_persons = Person.query.count()
-    number_of_projects = Project.query.count()
-    number_of_tasks = Task.query.count()
-    number_of_tasks_in_progres = Task.query.filter(Task.status == "in_progres").count()
-    number_of_tasks_done = Task.query.filter(Task.status == "done").count()
-    metrics_section(number_of_projects, number_of_tasks, number_of_tasks_in_progres, number_of_tasks_done,
-                    number_of_persons)
-    all_persons = Person.query.limit(20).all()
-    expanded_persons = (
-        Person.query
-        .join(Person.tasks)
-        .filter(Task.id == 6)
-        .order_by(desc(Person.id))
-        .all()
-    )
-    charts_section(expanded_persons)
-    first_person = Person.query.first()
-    alice = Person.query.filter_by(firstname="Alice").all()
-    bob = Person.query.filter(Person.firstname == "Bob").all()
-    mail_users = Person.query.filter(Person.email.like("%example.com")).all()
-    st.dataframe(all_persons)
-    st.write(expanded_persons)
-    st.write(first_person)
-    st.write(alice)
-    st.write(bob)
-    st.write(mail_users)
+    """
+    Main function to display the dashboard in the Streamlit application.
+
+    This function orchestrates the key sections of the Streamlit app, providing a dashboard
+    that displays team workflow statistics. It organizes the UI into various sections,
+    including a header, metrics, charts, and a footer, to give users a comprehensive view
+    of their team's performance and workflow.
+
+    Sections:
+    - Header Section:
+      - Calls `header_section("Dashboard", "Find Inspiring Team Workflow Statistics.")` to display
+        the title of the dashboard and a motivational subtitle.
+    - Metrics Section:
+      - Calls `metrics_section(session)` to display key metrics related to team performance,
+        such as completed tasks, active projects, and more. This section uses the SQLAlchemy
+        session to query the necessary data from the database.
+    - Chart Section:
+      - Calls `chart_section(session)` to visualize task distribution among team members
+        using a bar chart. This section also queries the database for relevant data.
+    - Footer Section:
+      - Calls `footer_section()` to display the footer of the application, providing any
+        additional information or links.
+
+    Parameters: None
+    Notes:
+    - The function assumes the existence of a global `session` object representing the SQLAlchemy session
+      used for database operations.
+    - Each section function (`header_section`, `metrics_section`, `chart_section`, `footer_section`)
+      is responsible for rendering a specific part of the UI and handling user interactions.
+    This function serves as the entry point for the Streamlit dashboard, organizing the layout
+    and ensuring that users can access and interpret their team workflow statistics effectively.
+    """
+    header_section("Dashboard", "Find Inspiring Team Workflow Statistics: "
+                                "_total count of items, recent updates and deletes_.")
+    metrics_section(session)
+    chart_section(session)
     footer_section()
 
 
