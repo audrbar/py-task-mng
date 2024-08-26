@@ -1,15 +1,15 @@
-"""
-Sets up the connection and session management class.
-"""
+"""Sets up the connection and session management class."""
 import os
-from dotenv import load_dotenv
-from sqlalchemy import create_engine, URL, exc
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, scoped_session
+from typing import Any
+
+from dotenv import load_dotenv  # type: ignore
+from sqlalchemy import create_engine, URL, exc  # type: ignore
+from sqlalchemy.orm import sessionmaker, scoped_session, declarative_base, Session  # type: ignore
 
 
 class DBEngine:
-    def __init__(self):
+    """Sets up the connection and session management class."""
+    def __init__(self) -> None:
         try:
             # Load environment variables
             load_dotenv()
@@ -52,9 +52,9 @@ class DBEngine:
             print(f"Error initializing the database engine: {e}")
             raise
 
-    def get_session(self):
-        """
-        Get a new session instance from the scoped session factory.
+    def get_session(self) -> Session | Session:
+        """Get a new session instance from the scoped session factory.
+
         Returns: session: A new SQLAlchemy session instance.
         """
         try:
@@ -63,17 +63,15 @@ class DBEngine:
             print(f"Error getting a new session: {e}")
             raise
 
-    def get_base(self):
-        """
-        Get the declarative base class for defining ORM models.
+    def get_base(self) -> Any:
+        """Get the declarative base class for defining ORM models.
+
         Returns: Base: The SQLAlchemy declarative base class.
         """
         return self.Base
 
-    def close_session(self):
-        """
-        Closes the scoped session.
-        """
+    def close_session(self) -> None:
+        """Closes the scoped session."""
         try:
             self.Session.remove()
             print("Session closed successfully.")

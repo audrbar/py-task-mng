@@ -1,6 +1,4 @@
-"""
-This File Serves Edit Data page.
-"""
+"""This File Serves Edit Data page."""
 from components.edit_section import edit_section
 from components.add_section import add_section
 from components.delete_section import delete_item_section
@@ -9,9 +7,8 @@ from src.models import Assignee, Manager, Project, Task
 from src.utilities import header_section, footer_section
 
 
-def main():
-    """
-    Main function to display and manage the project items in the Streamlit application.
+def main() -> None:
+    """Main function to display and manage the project items in the Streamlit application.
 
     This function orchestrates the main sections of the Streamlit app, allowing users
     to edit, add, and delete items related to projects. It organizes the UI into
@@ -51,14 +48,12 @@ def main():
     managers_from_query = []
     tasks_from_query = []
     assignees_from_query = []
-    last_tasks_query = []
     try:
         projects_from_query = session.query(Project.id, Project.project_name, Project.project_aim,
                                             Project.project_budget).all()
         managers_from_query = session.query(Manager.id, Manager.firstname, Manager.lastname).all()
         tasks_from_query = session.query(Task.id, Task.task_name, Task.status, Task.project_id).all()
         assignees_from_query = session.query(Assignee.id, Assignee.firstname, Assignee.lastname).all()
-        last_tasks_query = session.query(Task.id).order_by(Task.id.desc()).first()
     except Exception as e:
         session.rollback()
         print(f"Error: {e}")

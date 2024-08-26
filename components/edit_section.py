@@ -1,14 +1,59 @@
-"""
-This File Holds Edit Items Section.
-"""
+"""This File Holds Edit Items Section."""
+from typing import Any
+
 import streamlit as st
+from sqlalchemy.orm import Session
 
 from src.base import db_engine
 from src.models import Assignee, Project, Task, AssigneeTask
 from src.utilities import find_person_id, find_project_id, make_a_list, make_persons_list
 
 
-def edit_section(session, projects_from_query, managers_from_query, tasks_from_query, assignees_from_query):
+def edit_section(session: Session | Session, projects_from_query: list[Any], managers_from_query: list[Any],
+                 tasks_from_query: list[Any], assignees_from_query: list[Any]) -> None:
+    """Displays an interface for updating various items in the database.
+
+    The function uses Streamlit to create a user interface that allows users to select and update different
+    attributes of projects, tasks, and assignees. The changes are applied to the database through SQLAlchemy
+    sessions, and the interface provides feedback on successful operations.
+
+    Parameters:
+    session : sqlalchemy.orm.session.Session
+        The SQLAlchemy session used for querying and updating the database.
+    projects_from_query : list
+        A list of project objects retrieved from the database.
+    managers_from_query : list
+        A list of manager objects retrieved from the database.
+    tasks_from_query : list
+        A list of task objects retrieved from the database.
+    assignees_from_query : list
+        A list of assignee objects retrieved from the database.
+
+    Interface Sections:
+    The interface is divided into five tabs, each handling a different type of update:
+    1. **Assign Manager**:
+       - Allows the user to select a project and assign a manager to it.
+       - The selected manager is assigned to the selected project, and the change is committed to the database.
+    2. **Edit Budget**:
+       - Allows the user to select a project and update its budget.
+       - The budget value is updated in the database for the selected project.
+    3. **Assign Assignee**:
+       - Allows the user to select a task and assign an assignee to it.
+       - The selected assignee is linked to the selected task, and the relationship is stored in the database.
+    4. **Change Status**:
+       - Allows the user to select a task and update its status.
+       - The task's status is updated in the database based on the selected value.
+    5. **Set Salary**:
+       - Allows the user to select an assignee and set their salary.
+       - The assignee's salary is updated in the database with the provided value.
+
+    Notes:
+    - The forms within each tab clear upon submission to allow for additional updates.
+    - The function commits each change to the database and closes the session after each operation.
+    - If the form is submitted without making a selection, the interface prompts the user to provide the
+    necessary input.
+    - Users are encouraged to check the results of their updates on the _Data Overview Page_.
+    """
     with (st.container()):
         st.write("---")
         left_column, right_column = st.columns([1, 3])

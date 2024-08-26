@@ -1,12 +1,44 @@
+"""This File Holds Overview Section."""
 from datetime import datetime, timedelta
 
 import streamlit as st
 from sqlalchemy import and_
+from sqlalchemy.orm import Session
 
 from src.models import Assignee, Project, Task
 
 
-def metrics_section(session) -> None:
+def metrics_section(session: Session | Session) -> None:
+    """Displays a metrics section in the application interface, summarizing key statistics.
+
+    This function queries the database to retrieve and display various metrics, including the total count of
+    projects, tasks, tasks in progress, tasks completed, and assignees. It also provides the count of new
+    entries and updates within the last five days. The metrics are presented in a grid format using Streamlit's
+    `metric` component.
+
+    Parameters:
+    session : sqlalchemy.orm.session.Session
+        The SQLAlchemy session used for querying the database. This session manages transactions and ensures
+        that all queries are executed within the context of the current session.
+
+    Returns:
+    None
+        This function does not return any values. It directly updates the Streamlit interface with the retrieved data.
+
+    Notes:
+    - The function handles any exceptions that occur during database queries by rolling back the session and
+      printing an error message to the console.
+    - The metrics displayed include:
+      1. **Projects count**: The total number of projects and the number of new or updated projects in the last 5 days.
+      2. **Tasks count**: The total number of tasks and the number of new or updated tasks in the last 5 days.
+      3. **Tasks in progress**: The total number of tasks currently in progress and the number of these updated in the last 5 days.
+      4. **Tasks done**: The total number of completed tasks and the number of these updated in the last 5 days.
+      5. **Our Team**: The total number of assignees and the number of new or updated assignees in the last 5 days.
+
+    Streamlit Interface:
+    - The metrics are displayed in a single row using Streamlit's column layout, with each metric occupying one column.
+    - Each metric includes a label, the total count, and the count of new or updated entries in the specified time frame.
+    """
     five_days_ago = datetime.now() - timedelta(days=5)
     number_of_projects = []
     number_of_tasks = []
