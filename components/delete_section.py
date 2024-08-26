@@ -1,56 +1,46 @@
+"""Delete Item Section."""
+from typing import Any
+
 import streamlit as st
+from sqlalchemy.orm import Session
 
 from src.base import db_engine
 from src.models import Assignee, Project, Task, Manager
 from src.utilities import make_a_list, find_project_id, make_persons_list, find_person_id
 
 
-def delete_item_section(session, projects_from_query, managers_from_query, tasks_from_query,
-                        assignees_from_query) -> None:
-    """
-    Displays a Streamlit container with columns and tabs for deleting items.
+def delete_item_section(session: Session | Session, projects_from_query: list[Any], managers_from_query: list[Any],
+                        tasks_from_query: list[Any], assignees_from_query: list[Any]) -> None:
+    """Displays an interface section for deleting items from the database.
 
-    This code block creates a container in a Streamlit application that allows users to delete selected items
-    such as tasks, assignees, or projects. It divides the UI into two columns, with the left column displaying
-    a header and description, and the right column displaying data retrieved from a database and organized
-    into tabs for deletion operations.
-
-    Layout:
-    - Left Column:
-      - Displays a header titled "Delete selected Item".
-      - Provides a brief description of the operation: "Get Rid of the unnecessary items."
-    - Right Column:
-      - Queries the database to retrieve lists of assignees, projects, and tasks.
-      - Displays a divider for visual separation.
-      - Organizes the deletion options into three tabs: "delete task", "delete assignee", and "delete project".
-
-    Components:
-    - `st.container()`: Creates a container for grouping the UI elements together.
-    - `st.write("---")`: Inserts a horizontal rule (divider) to separate sections visually.
-    - `st.columns([1, 3])`: Creates two columns with a 1:3 width ratio. The left column is narrower,
-      and the right column is wider.
-    - Left Column:
-      - `st.header("Delete selected Item")`: Adds a header to the left column.
-      - `st.write('Get Rid of the unnecessary items.')`: Adds a description below the header.
-    - Right Column:
-      - Queries the `Assignee`, `Project`, and `Task` tables using SQLAlchemy to fetch the necessary data.
-      - `st.divider()`: Adds another visual divider before the tabs.
-      - `st.tabs(...)`: Creates three tabs for different deletion operations.
+    This function creates a Streamlit interface section that allows users to delete projects, managers,
+    tasks, and assignees from the database. Users can select an item from a dropdown menu, and upon
+    submission, the selected item is deleted from the database.
 
     Parameters:
-    - `assignees_from_query`: The list of assignees retrieved from the database, containing their ID, first name,
-      and last name.
-    - `projects_from_query`: The list of projects retrieved from the database, containing their ID, name, aim,
-      and budget.
-    - `tasks_from_query`: The list of tasks retrieved from the database, containing their ID and task name.
+    session : sqlalchemy.orm.session.Session
+     The SQLAlchemy session used for querying and committing changes to the database. This session
+     manages transactions and ensures that deletions are properly executed and committed.
+    projects_from_query : list
+     A list of project objects retrieved from the database, used to populate the project deletion dropdown.
+    managers_from_query : list
+     A list of manager objects retrieved from the database, used to populate the manager deletion dropdown.
+    tasks_from_query : list
+     A list of task objects retrieved from the database, used to populate the task deletion dropdown.
+    assignees_from_query : list
+     A list of assignee objects retrieved from the database, used to populate the assignee deletion dropdown.
 
-    Tabs:
-    - "delete task": Tab for deleting tasks from the database.
-    - "delete assignee": Tab for deleting assignees from the database.
-    - "delete project": Tab for deleting projects from the database.
+    Returns:
+    None
+     This function does not return any values. It directly updates the Streamlit interface based on
+     user actions and the database operations performed.
 
-    This structure allows for a user-friendly interface where different entities can be deleted in a structured
-    and organized manner using Streamlit.
+    Notes:
+    - The function handles any exceptions that occur during database operations by rolling back the session
+    and displaying an error message to the user.
+    - After each deletion, the session is closed to ensure that resources are properly released.
+    - The user is prompted to select an item and confirm the deletion by pressing the Submit button. If the
+    item cannot be found in the database, an appropriate message is displayed.
     """
     with (st.container()):
         st.write("---")

@@ -1,6 +1,4 @@
-"""
-This File Serves Dashboard page.
-"""
+"""This File Serves Dashboard page."""
 
 from components.chart_section import chart_section
 from components.metrics_section import metrics_section
@@ -8,9 +6,8 @@ from src.base import session
 from src.utilities import header_section, footer_section
 
 
-def main():
-    """
-    Main function to display the dashboard in the Streamlit application.
+def main() -> None:
+    """Main function to display the dashboard in the Streamlit application.
 
     This function orchestrates the key sections of the Streamlit app, providing a dashboard
     that displays team workflow statistics. It organizes the UI into various sections,

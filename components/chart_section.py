@@ -1,23 +1,22 @@
-"""
-This File Holds Chart Section.
-"""
+"""This File Holds Chart Section."""
 import streamlit as st
-from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import joinedload, Session
 
 from src.base import db_engine
 from src.models import Assignee
 from src.utilities import assignees_to_chart
 
 
-def chart_section(session) -> None:
-    """
-    Displays a bar chart of tasks per assignee in the Streamlit application.
+def chart_section(session: Session | Session) -> None:
+    """Displays a bar chart of tasks per assignee in the Streamlit application.
 
     This function creates a section in the Streamlit app that visualizes the distribution
     of tasks assigned to each assignee. It retrieves all assignees from the database, processes
     the data to calculate the number of tasks per assignee, and displays this information in
     a bar chart.
+
     Parameters: session (Session): The SQLAlchemy session used to query the database for assignee data.
+
     Process:
     - Retrieves all `Assignee` instances from the database using the provided SQLAlchemy session.
     - Converts the list of `Assignee` instances into a pandas DataFrame using the `assignees_to_chart` function.
@@ -25,9 +24,12 @@ def chart_section(session) -> None:
     - Sets the `full_name` column as the DataFrame's index for easy visualization.
     - Extracts the `tasks` column, which contains the count of tasks per assignee.
     - Displays a bar chart in the Streamlit app showing the number of tasks assigned to each assignee.
+
     Returns: None: This function does not return any value; it directly modifies the Streamlit UI.
+
     Example Usage: Call this function within the main Streamlit app function to display the tasks per assignee chart:
         chart_section(session)
+
     Notes: The bar chart provides a visual representation of task distribution among assignees, helping users
       quickly identify task allocation.
     """

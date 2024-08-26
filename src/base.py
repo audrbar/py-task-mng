@@ -1,22 +1,19 @@
-"""
-Sets up the base model class and session management for an SQLAlchemy ORM setup.
-"""
+"""Sets up the base model class and session management for an SQLAlchemy ORM setup."""
 from datetime import datetime
 from sqlalchemy import Column, DateTime, Integer, String, Float
 from sqlalchemy.orm import declarative_base
 
 from src.db_connection import DBEngine
 
-"""
-This code snippet sets up the base model class and session management for an SQLAlchemy ORM setup.
+"""This code snippet sets up the base model class and session management for an SQLAlchemy ORM setup.
 
 Attributes:
     Model (Base): The declarative base class for all ORM models, with should inherit from this base class.
-    db_engine (DBEngine): An instance of the DBEngine class, which handles the connection to the database 
+    db_engine (DBEngine): An instance of the DBEngine class, which handles the connection to the database
     and session creation.
-    session (scoped_session): A scoped session object created from the DBEngine instance, providing thread-safe 
+    session (scoped_session): A scoped session object created from the DBEngine instance, providing thread-safe
     session handling.
-    Model.query (Query): A SQLAlchemy query property attached to the `Model` base class. This allows for querying 
+    Model.query (Query): A SQLAlchemy query property attached to the `Model` base class. This allows for querying
     directly on model classes (e.g., `User.query.all()`) when using Flask-SQLAlchemy-like syntax.
 """
 
@@ -26,8 +23,7 @@ Model = declarative_base()
 
 
 class TimeStampedModel(Model):
-    """
-    An abstract base class model that provides self-updating 'created_at' and 'updated_at' fields.
+    """An abstract base class model that provides self-updating 'created_at' and 'updated_at' fields.
 
     Attributes:
         created_at (DateTime): Stores the timestamp when the record was created.
@@ -44,8 +40,7 @@ class TimeStampedModel(Model):
 
 
 class PersonModel(TimeStampedModel):
-    """
-    Abstract base class representing a person entity with common attributes.
+    """Abstract base class representing a person entity with common attributes.
 
     This class is intended to be inherited by other classes that represent specific types of persons
     (e.g., Employee, Manager) in a system. It defines common attributes such as `firstname`, `lastname`,

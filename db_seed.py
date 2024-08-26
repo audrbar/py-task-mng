@@ -1,6 +1,4 @@
-"""
-Deletes, Creates Database Tables and Feeds them with Dummy Data for Testing Purposes.
-"""
+"""Deletes, Creates Database Tables and Feeds them with Dummy Data for Testing Purposes."""
 from sqlalchemy import text
 from sqlalchemy.exc import IntegrityError
 
@@ -9,10 +7,8 @@ from src.models import Project, Task, Assignee, Manager
 from dummy_data import projects_list_full
 
 
-def drop_tables():
-    """
-    Drops all tables in the database, specifically targeting the 'projects' table
-    and its dependent objects.
+def drop_tables() -> None:
+    """Drops all tables in the database, specifically targeting the 'projects' table and its dependent objects.
 
     This function first reflects the existing database schema into SQLAlchemy's
     `Model.metadata`, allowing it to work with the current state of the database.
@@ -49,9 +45,8 @@ def drop_tables():
         db_engine.close_session()
 
 
-def create_database():
-    """
-    Creates all tables in the database according to the SQLAlchemy models defined in the metadata.
+def create_database() -> None:
+    """Creates all tables in the database according to the SQLAlchemy models defined in the metadata.
 
     This function uses the SQLAlchemy `Model.metadata.create_all()` method to create all
     tables that are part of the current model's metadata. If the tables already exist,
@@ -70,9 +65,8 @@ def create_database():
     Model.metadata.create_all(db_engine.engine)
 
 
-def seed_database():
-    """
-    Populates the database with initial data for projects, managers, tasks, and assignees.
+def seed_database() -> None:
+    """Populates the database with initial data for projects, managers, tasks, and assignees.
 
     This function iterates over a predefined list of project data (`projects_list_full`) and
     populates the database with `Manager`, `Project`, `Task`, and `Assignee` records. It ensures
@@ -93,6 +87,7 @@ def seed_database():
     rolled back,  and an error message is printed.
     Finalization: - The database session is closed in the `finally` block to ensure that resources are properly
     released.
+
     Notes:
     - This function assumes that the database schema has already been created (e.g., using `create_database()`).
     - Be cautious when running this function multiple times as it may lead to data duplication if not properly handled.
@@ -158,9 +153,8 @@ def seed_database():
         db_engine.close_session()
 
 
-def main():
-    """
-    Displays a menu to the user for executing various database management functions.
+def main() -> None:
+    """Displays a menu to the user for executing various database management functions.
 
     This function presents the user with a menu of options to manage the database. The user
     can choose to drop all tables, create database tables as defined by the models, seed

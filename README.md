@@ -1,14 +1,14 @@
 # Project Management App
 ## Description
-This Project Management App is a simple web-based application built using Python, SQLAlchemy and Streamlit. The app 
-allows users to manage projects, tasks, and assignees. It supports basic operations such as creating database tables, 
-seeding the database with initial data, and performing CRUD (Create, Read, Update, Delete) operations on the data 
-using SQLAlchemy Object Relational Mapper. The app features one-to-one, one-to-many, and many-to-many relationships 
+This Project Management App is a simple web-based application built using Python, SQLAlchemy and Streamlit. The app
+allows users to manage projects, tasks, and assignees. It supports basic operations such as creating database tables,
+seeding the database with initial data, and performing CRUD (Create, Read, Update, Delete) operations on the data
+using SQLAlchemy Object Relational Mapper. The app features one-to-one, one-to-many, and many-to-many relationships
 among the entities.
 ## Features
 - Create Database: Automatically generate the database schema based on defined SQLAlchemy models.
 - Seed Database: Populate the database with initial dummy data, including projects, managers, tasks and assignees.
-- CRUD Operations: Perform operations such as creating, reading, updating, and deleting projects, managers, tasks, 
+- CRUD Operations: Perform operations such as creating, reading, updating, and deleting projects, managers, tasks,
 and assignees.
 - One-to-One Relationship: Between Project and Manager with cascading deletes.
 - One-to-Many Relationship: Between Project and Task.
@@ -43,13 +43,13 @@ port=your_db_port
 streamlit run app.py
 ```
 ## Usage
-- **Drop All Tables:** This operation will drop all tables from the database. Uncomment the relevant lines in the main 
+- **Drop All Tables:** This operation will drop all tables from the database. Uncomment the relevant lines in the main
 function to enable this functionality.
-- **Create Tables:** This operation will create all necessary tables as defined in the SQLAlchemy models. This is 
+- **Create Tables:** This operation will create all necessary tables as defined in the SQLAlchemy models. This is
 enabled by default in the main function.
-- **Seed Database:** Populate the database with initial dummy data. Uncomment the relevant lines in the main function 
+- **Seed Database:** Populate the database with initial dummy data. Uncomment the relevant lines in the main function
 to enable this functionality.
-- **Explore App Features:** Perform operations such as creating, reading, updating, and deleting projects, managers, 
+- **Explore App Features:** Perform operations such as creating, reading, updating, and deleting projects, managers,
 tasks and assignees.
 ## Code Structure
 - `app.py`: The main Streamlit application file.
@@ -73,7 +73,7 @@ Database Diagram was used to design the database structure:
 There are tests writen for connection testing in [test directory](./data/test_conn.py).
 You can run it in console by command:
 ```
-pytest
+python -m unittest discover -s tests
 ```
 ## Project status
 Way forward:

@@ -1,59 +1,43 @@
-"""
-This File Serves New Item Section for Add Item Page.
-"""
+"""This File Serves New Item Section for Add Item Page."""
+from typing import Any, List
+
 import streamlit as st
+from sqlalchemy.orm import Session
 
 from src.base import db_engine
 from src.models import Project, Assignee, Task, Manager
 from src.utilities import make_a_list, make_persons_list, find_project_id
 
 
-def add_section(session, projects_from_query, assignees_from_query):
-    """
-    Displays a Streamlit section for inserting new items into the system.
+def add_section(session: Session, projects_from_query: list[Any], assignees_from_query: list[Any]) -> None:
+    """Displays an interface section for adding new projects, tasks, and assignees to the database.
 
-    This function creates a Streamlit UI section that allows users to insert new items
-    (projects, tasks, assignees) into the system. The section is divided into two columns
-    with a header and description in the right column and data retrieval and input tabs
-    in the left column.
-
-    Layout:
-    - Left Column:
-      - Displays tabs for adding a new project, task, or assignee.
-      - Retrieves data from the database for populating form fields and dropdowns:
-        - `assignees_from_query`: A list of all assignees, including their ID, first name, and last name.
-        - `managers_from_query`: A list of assignees who are not currently managing any projects.
-        - `projects_from_query`: A list of all projects, including their ID, name, aim, and budget.
-        - `last_tasks_query`: Retrieves the most recent task ID, used for ordering or reference.
-    - Right Column:
-      - Displays a header titled "Insert New Item".
-      - Provides a brief description instructing the user to insert new items (projects, tasks, or assignees)
-        and provide the necessary details.
-
-    Components:
-    - `st.container()`: Creates a container to group the UI elements together.
-    - `st.write("---")`: Inserts a horizontal rule (divider) to visually separate sections.
-    - `st.columns([2, 1])`: Creates two columns with a 2:1 width ratio. The left column is wider
-      for data and input fields, and the right column is narrower for the header and description.
-    - Right Column:
-      - `st.header("Insert New Item")`: Adds a header to the right column.
-      - `st.write(...)`: Adds a description explaining the purpose of the section.
-    - Left Column:
-      - Queries the `Assignee`, `Project`, and `Task` tables using SQLAlchemy to fetch the necessary data.
-      - `st.tabs(...)`: Creates three tabs for different insertion operations.
+    This function creates a Streamlit interface section that allows users to add new projects,
+    tasks, and assignees to the system. The interface includes forms for each type of item, and
+    upon submission, the provided data is added to the database.
 
     Parameters:
-    session (Session): The SQLAlchemy session used to query the database.
+    session : sqlalchemy.orm.session.Session
+        The SQLAlchemy session used for querying and committing changes to the database. This session
+        manages transactions and ensures that new records are properly added and committed.
+    projects_from_query : list
+        A list of project objects retrieved from the database, used to populate the project selection
+        dropdown in the task creation form.
+    assignees_from_query : list
+        A list of assignee objects retrieved from the database, used to populate the assignee selection
+        dropdown in the task creation form.
 
-    Tabs:
-    - "add project": Tab for inserting a new project into the database.
-    - "add task": Tab for inserting a new task into the database.
-    - "add assignee": Tab for inserting a new assignee into the database.
+    Returns:
+    None
+        This function does not return any values. It directly updates the Streamlit interface based on
+        user actions and the database operations performed.
 
-    This structure provides a user-friendly interface for adding new entities to the system,
-    with relevant data fetched from the database to assist in the process.
+    Notes:
+    - The function handles each item type (project, task, assignee) in a separate tab within the Streamlit
+      interface. Users can fill out the relevant forms to add new items to the database.
+    - After each addition, the session is closed to ensure that resources are properly released.
+    - Users are prompted to fill out all required fields and submit the form to successfully add a new item.
     """
-
     with st.container():
         st.write("---")
         left_column, right_column = st.columns([2, 1])

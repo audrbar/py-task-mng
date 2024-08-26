@@ -1,6 +1,4 @@
-"""
-Dummy Data to Feed Database Tables for Testing Purposes.
-"""
+"""Dummy Data to Feed Database Tables for Testing Purposes."""
 
 projects_list_full = [
     {
