@@ -1,0 +1,2 @@
+[tool.poetry.extras]
+pipfile_deprecated_finder = ["some_dependency"]
