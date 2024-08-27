@@ -4,9 +4,7 @@ import streamlit_lottie as lto
 import requests
 import pandas as pd
 from datetime import datetime
-from typing import Any, List
-
-from pandas import DataFrame
+from typing import Any
 
 
 def page_config() -> None:

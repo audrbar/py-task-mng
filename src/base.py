@@ -19,10 +19,10 @@ Attributes:
 
 db_engine = DBEngine()
 session = db_engine.get_session()
-Model = declarative_base()
+Model = db_engine.get_base()
 
 
-class TimeStampedModel(Model):
+class TimeStampedModel(Model):  # type: ignore
     """An abstract base class model that provides self-updating 'created_at' and 'updated_at' fields.
 
     Attributes:
