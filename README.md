@@ -25,7 +25,10 @@ cd project-management-app
 python3 -m venv venv
 source venv/bin/activate
 ```
-On Windows use `venv\Scripts\activate`
+On Windows use
+```
+venv\Scripts\activate
+```
 3. Install Dependencies
 ```
 pip install -r requirements.txt
@@ -40,19 +43,27 @@ port=your_db_port
 ```
 5. Run the App:
 ```
-streamlit run app.py
+streamlit run Home.py
 ```
 ## Usage
-- **Drop All Tables:** This operation will drop all tables from the database. Uncomment the relevant lines in the main
-function to enable this functionality.
-- **Create Tables:** This operation will create all necessary tables as defined in the SQLAlchemy models. This is
-enabled by default in the main function.
-- **Seed Database:** Populate the database with initial dummy data. Uncomment the relevant lines in the main function
-to enable this functionality.
+Open `db_seed.py` file, run `main()` function and type the number corresponding to the action you want to perform and
+press Enter:
+- **Option 1:** `Drop all tables in the database` This option will delete all the tables in the database. After
+selecting this option, all existing tables will be dropped from the database. Use this option if you want to start
+fresh or reset the database schema.
+- **Option 2:** `Create database tables Model provides` This option will create the database tables as defined
+by your ORM models. After selecting this option, the database tables will be created based on the models
+defined in your code. Use this option to set up the database structure.
+- **Option 3:** `Seed database with dummy data` This option will populate the database with dummy data,
+which is useful for testing or development purposes. After selecting this option, the database will be filled with
+predefined sample data.
+- **Option 4:** `Just exit` This option will exit the script without making any changes to the database. If you choose
+this option, the script will close the session and terminate.
 - **Explore App Features:** Perform operations such as creating, reading, updating, and deleting projects, managers,
-tasks and assignees.
+tasks and assignees. The script ensures that the database session is properly closed after any operation, ensuring
+no resources are left hanging.
 ## Code Structure
-- `app.py`: The main Streamlit application file.
+- `Home.py`: The main Streamlit application file.
 - `models.py`: Contains the SQLAlchemy models for `Project`, `Manager`, `Task`, and `Assignee`.
 - `database.py`: Contains functions to create, drop, and seed the database.
 - `requirements.txt`: Lists the Python dependencies required to run the app.
