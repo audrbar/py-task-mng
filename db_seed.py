@@ -1,4 +1,6 @@
 """Deletes, Creates Database Tables and Feeds them with Dummy Data for Testing Purposes."""
+from typing import Any
+
 from sqlalchemy import text
 from sqlalchemy.exc import IntegrityError
 
@@ -65,15 +67,15 @@ def create_database() -> None:
     Model.metadata.create_all(db_engine.engine)
 
 
-def seed_database() -> None:
+def seed_database(projects_data: list[Any]) -> None:
     """Populates the database with initial data for projects, managers, tasks, and assignees.
 
-    This function iterates over a predefined list of project data (`projects_list_full`) and
-    populates the database with `Manager`, `Project`, `Task`, and `Assignee` records. It ensures
-    that existing managers and assignees are not duplicated by checking their presence based on
-    the email field. The function also manages the associations between projects, tasks, and assignees.
+    This function iterates over a predefined list of project data and populates the database with `Manager`,
+    `Project`, `Task`, and `Assignee` records. It ensures that existing managers and assignees are not duplicated
+    by checking their presence based on the email field. The function also manages the associations between
+    projects, tasks, and assignees.
     Process:
-    1. For each project in `projects_list_full`:
+    1. For each project in `projects_data`:
         - Check if the manager exists in the database by email. If not, create and add the manager.
         - Create the project and associate it with the manager.
         - For each task in the project:
@@ -95,7 +97,7 @@ def seed_database() -> None:
       lead to locks or other performance issues.
     """
     try:
-        for project_data in projects_list_full:
+        for project_data in projects_data:
             # Create or get the Manager object
             manager = session.query(Manager).filter_by(email=project_data['manager']['email']).first()
             if not manager:
@@ -196,7 +198,7 @@ def main() -> None:
     elif use_choice == '2':
         create_database()
     elif use_choice == '3':
-        seed_database()
+        seed_database(projects_list_full)
     else:
         db_engine.close_session()
 

@@ -2,9 +2,9 @@
 import os
 from typing import Any
 
-from dotenv import load_dotenv  # type: ignore
-from sqlalchemy import create_engine, URL, exc  # type: ignore
-from sqlalchemy.orm import sessionmaker, scoped_session, declarative_base, Session  # type: ignore
+from dotenv import load_dotenv
+from sqlalchemy import create_engine, URL, exc
+from sqlalchemy.orm import sessionmaker, scoped_session, declarative_base, Session
 
 
 class DBEngine:
