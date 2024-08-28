@@ -1,7 +1,6 @@
 """Sets up the base model class and session management for an SQLAlchemy ORM setup."""
 from datetime import datetime
 from sqlalchemy import Column, DateTime, Integer, String, Float
-from sqlalchemy.orm import declarative_base
 
 from src.db_connection import DBEngine
 
