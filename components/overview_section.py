@@ -4,7 +4,7 @@ from sqlalchemy.orm import joinedload, Session
 
 from src.base import db_engine
 from src.models import Assignee, Project, Task, Manager
-from src.utilities import assignees_to_df, projects_to_df, tasks_to_df, managers_to_df
+from utils.utilities import assignees_to_df, projects_to_df, tasks_to_df, managers_to_df
 
 
 def overview_section(session: Session | Session) -> None:

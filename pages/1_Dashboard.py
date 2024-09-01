@@ -3,7 +3,7 @@
 from components.chart_section import chart_section
 from components.metrics_section import metrics_section
 from src.base import session
-from src.utilities import header_section, footer_section
+from utils.st_utils import header_section, footer_section
 
 
 def main() -> None:

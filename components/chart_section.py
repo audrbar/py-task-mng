@@ -4,7 +4,7 @@ from sqlalchemy.orm import joinedload, Session
 
 from src.base import db_engine
 from src.models import Assignee
-from src.utilities import assignees_to_chart
+from utils.utilities import assignees_to_chart
 
 
 def chart_section(session: Session | Session) -> None:

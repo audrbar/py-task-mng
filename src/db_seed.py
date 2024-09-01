@@ -6,7 +6,7 @@ from sqlalchemy.exc import IntegrityError
 
 from src.base import db_engine, session, Model
 from src.models import Project, Task, Assignee, Manager
-from dummy_data import projects_list_full
+from src.dummy_data import projects_list_full
 
 
 def drop_tables() -> None:

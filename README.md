@@ -1,3 +1,5 @@
+![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)
+![Hackage Dependencies](https://img.shields.io/hackage-deps/v/:packageName)
 # Project Management App
 ## Description
 This Project Management App is a simple web-based application built using Python, SQLAlchemy and Streamlit. The app
@@ -18,7 +20,7 @@ and assignees.
 1. Clone the Repository
 ```
 git clone https://github.com/audrbar/py-task-mng.git
-cd project-management-app
+cd py-task-mng
 ```
 2. Create and Activate a Virtual Environment
 ```

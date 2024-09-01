@@ -4,7 +4,7 @@ from components.add_section import add_section
 from components.delete_section import delete_item_section
 from src.base import session, db_engine
 from src.models import Assignee, Manager, Project, Task
-from src.utilities import header_section, footer_section
+from utils.st_utils import header_section, footer_section
 
 
 def main() -> None:
@@ -49,8 +49,9 @@ def main() -> None:
     tasks_from_query = []
     assignees_from_query = []
     try:
-        projects_from_query = session.query(Project.id, Project.project_name, Project.project_aim,
-                                            Project.project_budget).all()
+        projects_from_query = session.query(
+            Project.id, Project.project_name, Project.project_aim, Project.project_budget
+        ).all()
         managers_from_query = session.query(Manager.id, Manager.firstname, Manager.lastname).all()
         tasks_from_query = session.query(Task.id, Task.task_name, Task.status, Task.project_id).all()
         assignees_from_query = session.query(Assignee.id, Assignee.firstname, Assignee.lastname).all()
@@ -59,9 +60,9 @@ def main() -> None:
         print(f"Error: {e}")
     finally:
         db_engine.close_session()
-    edit_section(session, projects_from_query, managers_from_query, tasks_from_query, assignees_from_query)
-    add_section(session, projects_from_query, assignees_from_query)
-    delete_item_section(session, projects_from_query, managers_from_query, tasks_from_query, assignees_from_query)
+    edit_section(projects_from_query, tasks_from_query, assignees_from_query)
+    add_section(projects_from_query, assignees_from_query)
+    delete_item_section(projects_from_query, managers_from_query, tasks_from_query, assignees_from_query)
     footer_section()
 
 
