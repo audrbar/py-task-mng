@@ -1,6 +1,5 @@
 """This Is The Main Entry File for Entire App."""
-
-from src.utilities import header_section, footer_section, page_config, hide_st_style, hero_section
+from utils.st_utils import header_section, footer_section, page_config, hide_st_style, hero_section
 
 
 def main() -> None:
