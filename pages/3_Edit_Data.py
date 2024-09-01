@@ -1,4 +1,6 @@
 """This File Serves Edit Data page."""
+from sqlalchemy import select
+
 from components.edit_section import edit_section
 from components.add_section import add_section
 from components.delete_section import delete_item_section
@@ -49,12 +51,10 @@ def main() -> None:
     tasks_from_query = []
     assignees_from_query = []
     try:
-        projects_from_query = session.query(
-            Project.id, Project.project_name, Project.project_aim, Project.project_budget
-        ).all()
-        managers_from_query = session.query(Manager.id, Manager.firstname, Manager.lastname).all()
-        tasks_from_query = session.query(Task.id, Task.task_name, Task.status, Task.project_id).all()
-        assignees_from_query = session.query(Assignee.id, Assignee.firstname, Assignee.lastname).all()
+        projects_from_query = session.execute(select(Project).order_by(Project.id)).scalars().all()
+        managers_from_query = session.execute(select(Manager).order_by(Manager.id)).scalars().all()
+        tasks_from_query = session.execute(select(Task).order_by(Task.id)).scalars().all()
+        assignees_from_query = session.execute(select(Assignee).order_by(Assignee.id)).scalars().all()
     except Exception as e:
         session.rollback()
         print(f"Error: {e}")

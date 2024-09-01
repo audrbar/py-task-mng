@@ -1,10 +1,12 @@
 """Functions that renders Streamlit Page's elements."""
+from typing import List
+
 import streamlit as st
 from datetime import datetime
 from src.base import db_engine, session
 from src.models import Assignee, Project, Task, Manager, AssigneeTask
-from utilities import (find_person_id, find_project_id, make_a_list, make_assignees_list, make_managers_list,
-                       load_lottie_url)
+from utils.utilities import (find_person_id, find_project_id, make_assignees_list, make_managers_list,
+                             load_lottie_url, assignees_to_chart, make_projects_list, make_tasks_list, find_task_id)
 
 
 def page_config() -> None:
@@ -78,12 +80,35 @@ def hero_section() -> None:
         st.write("---")
         left_column, right_column = st.columns(2, gap="small")
         with left_column:
-            st.write("Built with _Python_, *Team Workflow Manager* is hosted on *Streamlit Community Cloud*, offering "
-                     "seamless access and real-time updates. All project data, including task details, budget "
-                     "allocations, and team information, are securely stored in a *PostgreSQL* database hosted on "
+            st.subheader("Main Features")
+            st.write("Built with _Python_, *Team Workflow Manager* may be hosted on *Streamlit Community Cloud*, "
+                     "offering seamless access and real-time updates. All project data, including task details, budget "
+                     "allocations, and team information, may be securely stored in a *PostgreSQL* database hosted on "
                      "*Supabase*, ensuring reliability and scalability for your project management needs.")
         with right_column:
             load_lottie_url("https://lottie.host/5b073eca-e11c-4391-8593-b28f39ce0870/q0fz2A3kuN.json")
+
+
+def chart_section(all_assignees_: List[Assignee]) -> None:
+    """Displays a bar chart of tasks per assignee in the Streamlit application.
+
+    This function creates a section in the Streamlit app that visualizes the distribution
+    of tasks assigned to each assignee. It receives all assignees, processes the data to calculate
+    the number of tasks per assignee, and displays this information in a bar chart.
+
+    assignees_from_query : list[Assignee]
+        A list of assignee objects or names obtained from a database query. This list populates the dropdown
+        menu where the user selects the assignee to be assigned to the selected task.
+
+    Returns: None: This function does not return any value; it directly modifies the Streamlit UI.
+    """
+    st.divider()
+    st.write("Tasks per assignee:")
+    df = assignees_to_chart(all_assignees_)
+    df['full_name'] = df['firstname'] + ' ' + df['lastname']
+    df.set_index('full_name', inplace=True)
+    tasks_per_assignee = df['tasks']
+    st.bar_chart(tasks_per_assignee)
 
 
 def footer_section() -> None:
@@ -118,7 +143,7 @@ def header_section(section_title: str, section_description: str) -> None:
         st.write(section_description)
 
 
-def edit_project_budget(projects_from_query: list[str]) -> None:
+def edit_project_budget(projects_from_query: list[Project]) -> None:
     """Creates a form in the Streamlit application to edit the budget of a selected project.
 
     This function generates a form within a Streamlit app that allows users to update the budget of an existing project.
@@ -126,7 +151,7 @@ def edit_project_budget(projects_from_query: list[str]) -> None:
     changes. Once submitted, the project's budget is updated in the database.
 
     Parameters:
-    projects_from_query : list[Any]
+    projects_from_query : list[Project]
         A list of project objects or names obtained from a database query. This list populates the dropdown
         menu where the user selects the project they want to update.
 
@@ -136,7 +161,7 @@ def edit_project_budget(projects_from_query: list[str]) -> None:
     with st.form('project_budget', clear_on_submit=True):
         st.write("Edit Project Budget:")
         selected_project = st.selectbox('Select a Project task is for:',
-                                        make_a_list(projects_from_query))
+                                        make_projects_list(projects_from_query))
         provided_budget = st.number_input('Provide budget value, $')
         submit_button = st.form_submit_button(label='Submit')
         if submit_button:
@@ -149,7 +174,7 @@ def edit_project_budget(projects_from_query: list[str]) -> None:
             st.write('To succeed please select and fill inputs and smash a Submit button.')
 
 
-def assign_task_assignee(tasks_from_query: list[str], assignees_from_query: list[str]) -> None:
+def assign_task_assignee(tasks_from_query: list[Task], assignees_from_query: list[Assignee]) -> None:
     """Creates a form in the Streamlit application to assign an assignee to a selected task.
 
     This function generates a form within a Streamlit app that allows users to assign an existing task to an assignee.
@@ -158,10 +183,10 @@ def assign_task_assignee(tasks_from_query: list[str], assignees_from_query: list
     database.
 
     Parameters:
-    tasks_from_query : list[Any]
+    tasks_from_query : list[Task]
         A list of task objects or names obtained from a database query. This list populates the dropdown
         menu where the user selects the task to be assigned to an assignee.
-    assignees_from_query : list[Any]
+    assignees_from_query : list[Assignee]
         A list of assignee objects or names obtained from a database query. This list populates the dropdown
         menu where the user selects the assignee to be assigned to the selected task.
 
@@ -170,11 +195,11 @@ def assign_task_assignee(tasks_from_query: list[str], assignees_from_query: list
     """
     with st.form('assign_assignee', clear_on_submit=True):
         st.write('Assign Task Assignee:')
-        selected_task = st.selectbox('Select a task to edit:', make_a_list(tasks_from_query))
+        selected_task = st.selectbox('Select a task to edit:', make_tasks_list(tasks_from_query))
         selected_assignee = st.selectbox('Select a Assignee to assign:',
                                          make_assignees_list(assignees_from_query))
         selected_assignee_id = find_person_id(assignees_from_query, selected_assignee)
-        selected_task_id = find_project_id(tasks_from_query, selected_task)
+        selected_task_id = find_task_id(tasks_from_query, selected_task)
         submit_button = st.form_submit_button(label='Submit')
         if submit_button:
             assignee_task_to_add = AssigneeTask(task_id=selected_task_id, assignee_id=selected_assignee_id)
@@ -186,7 +211,7 @@ def assign_task_assignee(tasks_from_query: list[str], assignees_from_query: list
             st.write('To succeed please select and fill inputs and smash a Submit button.')
 
 
-def change_task_status(tasks_from_query: list[str]) -> None:
+def change_task_status(tasks_from_query: list[Task]) -> None:
     """Creates a form in the Streamlit application to change the status of a selected task.
 
     This function generates a form within a Streamlit app that allows users to update the status of an existing task.
@@ -194,7 +219,7 @@ def change_task_status(tasks_from_query: list[str]) -> None:
     to apply the changes. Upon submission, the selected task's status is updated in the database.
 
     Parameters:
-    tasks_from_query : list[Any]
+    tasks_from_query : list[Task]
         A list of task objects or names obtained from a database query. This list populates the dropdown
         menu where the user selects the task whose status they want to change.
 
@@ -203,7 +228,7 @@ def change_task_status(tasks_from_query: list[str]) -> None:
     """
     with st.form('change_status', clear_on_submit=True):
         st.write('Change Task status:')
-        selected_task = st.selectbox('Select a task to edit:', make_a_list(tasks_from_query))
+        selected_task = st.selectbox('Select a task to edit:', make_tasks_list(tasks_from_query))
         selected_status = st.selectbox('Select a Task status to set', ['not_started', 'in_progres', 'done'])
         submit_button = st.form_submit_button(label='Submit')
         if submit_button:
@@ -216,7 +241,7 @@ def change_task_status(tasks_from_query: list[str]) -> None:
             st.write('To succeed please select input and smash a Submit button.')
 
 
-def set_salary(assignees_from_query: list[str]) -> None:
+def set_salary(assignees_from_query: list[Assignee]) -> None:
     """Creates a form in the Streamlit application to set or update the salary of a selected assignee.
 
     This function generates a form within a Streamlit app that allows users to set or update the salary of an existing
@@ -287,7 +312,7 @@ def add_new_project() -> None:
             st.write('To succeed please fill and select inputs and smash a Submit button.')
 
 
-def add_new_task(assignees_from_query: list[str], projects_from_query: list[str]) -> None:
+def add_new_task(assignees_from_query: list[Assignee], projects_from_query: list[Project]) -> None:
     """Creates a form in the Streamlit application to add a new task and assign it to a project and assignee.
 
     This function generates a form within a Streamlit app that allows users to input details for creating a new task.
@@ -296,10 +321,10 @@ def add_new_task(assignees_from_query: list[str], projects_from_query: list[str]
     assigns it to the selected assignee.
 
     Parameters:
-    assignees_from_query : list[Any]
+    assignees_from_query : list[Assignee]
         A list of assignee objects or names obtained from a database query. This list populates the dropdown menu where
         the user selects the assignee to whom the task will be assigned.
-    projects_from_query : list[Any]
+    projects_from_query : list[Project]
         A list of project objects or names obtained from a database query. This list populates the dropdown menu where
         the user selects the project to which the task will be associated.
 
@@ -314,7 +339,7 @@ def add_new_task(assignees_from_query: list[str], projects_from_query: list[str]
         provided_due_date = st.date_input('Provide due date:', value=None, format="YYYY/MM/DD")
         selected_assignee = st.selectbox('Select a assignee:', make_assignees_list(assignees_from_query))
         selected_project = st.selectbox('Select a Project task is for:',
-                                        make_a_list(projects_from_query))
+                                        make_projects_list(projects_from_query))
         selected_project_id = find_project_id(projects_from_query, selected_project)
         submit_button = st.form_submit_button(label='Submit')
         if submit_button:
@@ -359,7 +384,7 @@ def add_new_assignee() -> None:
             st.write('To succeed please fill inputs and smash a Submit button.')
 
 
-def delete_project(projects_from_query: list[str]) -> None:
+def delete_project(projects_from_query: list[Project]) -> None:
     """Creates a form in the Streamlit application to delete an existing project from the system.
 
     This function generates a form within a Streamlit app that allows users to delete an existing project.
@@ -368,7 +393,7 @@ def delete_project(projects_from_query: list[str]) -> None:
     an issue occurs during deletion.
 
     Parameters:
-    projects_from_query : list[Any]
+    projects_from_query : list[Project]
         A list of project objects or names obtained from a database query. This list populates the dropdown
         menu where the user selects the project they want to delete.
 
@@ -378,7 +403,7 @@ def delete_project(projects_from_query: list[str]) -> None:
     with st.form('delete_project', clear_on_submit=True):
         st.write("Delete Project:")
         selected_project = st.selectbox('Select a Project to delete',
-                                        make_a_list(projects_from_query))
+                                        make_projects_list(projects_from_query))
         selected_project_id = find_project_id(projects_from_query, selected_project)
         submit_button = st.form_submit_button(label='Submit')
         if submit_button:
@@ -400,7 +425,7 @@ def delete_project(projects_from_query: list[str]) -> None:
             st.write('To succeed please select input and smash a Submit button.')
 
 
-def delete_manager(managers_from_query: list[str]) -> None:
+def delete_manager(managers_from_query: list[Manager]) -> None:
     """Creates a form in the Streamlit application to delete an existing manager from the system.
 
     This function generates a form within a Streamlit app that allows users to delete an existing manager.
@@ -409,7 +434,7 @@ def delete_manager(managers_from_query: list[str]) -> None:
     an issue occurs during deletion.
 
     Parameters:
-    managers_from_query : list[Any]
+    managers_from_query : list[Manager]
         A list of manager objects or names obtained from a database query. This list populates the dropdown
         menu where the user selects the manager they want to delete.
 
@@ -440,7 +465,7 @@ def delete_manager(managers_from_query: list[str]) -> None:
             st.write('To succeed please select input and smash a Submit button.')
 
 
-def delete_task(tasks_from_query: list[str]) -> None:
+def delete_task(tasks_from_query: list[Task]) -> None:
     """Creates a form in the Streamlit application to delete an existing task from the system.
 
     This function generates a form within a Streamlit app that allows users to delete an existing task.
@@ -449,7 +474,7 @@ def delete_task(tasks_from_query: list[str]) -> None:
     an issue occurs during deletion.
 
     Parameters:
-    tasks_from_query : list[Any]
+    tasks_from_query : list[Task]
         A list of task objects or names obtained from a database query. This list populates the dropdown
         menu where the user selects the task they want to delete.
 
@@ -458,8 +483,8 @@ def delete_task(tasks_from_query: list[str]) -> None:
     """
     with st.form('delete_task', clear_on_submit=True):
         st.write("Delete task:")
-        selected_task = st.selectbox('Select a Task to delete', make_a_list(tasks_from_query))
-        selected_task_id = find_project_id(tasks_from_query, selected_task)
+        selected_task = st.selectbox('Select a Task to delete', make_tasks_list(tasks_from_query))
+        selected_task_id = find_task_id(tasks_from_query, selected_task)
         submit_button = st.form_submit_button(label='Submit')
         if submit_button:
             task_to_delete = session.query(Task).filter(Task.id == selected_task_id).first()
@@ -479,7 +504,7 @@ def delete_task(tasks_from_query: list[str]) -> None:
             st.write('To succeed please select input and smash a Submit button.')
 
 
-def delete_assignee(assignees_from_query: list[str]) -> None:
+def delete_assignee(assignees_from_query: list[Assignee]) -> None:
     """Creates a form in the Streamlit application to delete an existing assignee from the system.
 
     This function generates a form within a Streamlit app that allows users to delete an existing assignee.
@@ -488,7 +513,7 @@ def delete_assignee(assignees_from_query: list[str]) -> None:
     an issue occurs during deletion.
 
     Parameters:
-    assignees_from_query : list[Any]
+    assignees_from_query : list[Assignee]
         A list of assignee objects or names obtained from a database query. This list populates the dropdown
         menu where the user selects the assignee they want to delete.
 
@@ -514,6 +539,6 @@ def delete_assignee(assignees_from_query: list[str]) -> None:
                 finally:
                     db_engine.close_session()
             else:
-                st.write(f"The manager _'{selected_assignee}'_ could not be found.")
+                st.write(f"The assignee _'{selected_assignee}'_ could not be found.")
         else:
             st.write('To succeed please select input and smash a Submit button.')

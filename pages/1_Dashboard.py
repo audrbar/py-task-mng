@@ -1,9 +1,7 @@
 """This File Serves Dashboard page."""
-
-from components.chart_section import chart_section
 from components.metrics_section import metrics_section
 from src.base import session
-from utils.st_utils import header_section, footer_section
+from utils.st_utils import header_section, footer_section, chart_section
 
 
 def main() -> None:
@@ -41,7 +39,6 @@ def main() -> None:
     header_section("Dashboard", "Find Inspiring Team Workflow Statistics: "
                                 "_total count of items, recent updates and deletes_.")
     metrics_section(session)
-    chart_section(session)
     footer_section()
 
 

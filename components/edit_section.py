@@ -1,9 +1,13 @@
 """Edit Items Section."""
+from typing import List
 import streamlit as st
+from src.models import Project, Task, Assignee
 from utils.st_utils import header_section, edit_project_budget, assign_task_assignee, change_task_status, set_salary
 
 
-def edit_section(projects_from_query: list[str], tasks_from_query: list[str], assignees_from_query: list[str]) -> None:
+def edit_section(
+        projects_from_query: List[Project], tasks_from_query: List[Task], assignees_from_query: List[Assignee]
+) -> None:
     """Creates an interactive section in the Streamlit application for editing various project-related items.
 
     This function generates a section within a Streamlit app that allows users to update existing data in the system.
@@ -12,15 +16,15 @@ def edit_section(projects_from_query: list[str], tasks_from_query: list[str], as
     from dropdown menus and input fields, and submit their changes to be saved to the database.
 
     Parameters:
-    projects_from_query : list[str]
+    projects_from_query : list[Project]
         A list of project names or identifiers obtained from a database query. This list is used to populate
         the dropdown menus where the user can select a project to edit its budget.
 
-    tasks_from_query : list[str]
+    tasks_from_query : list[Task]
         A list of task names or identifiers obtained from a database query. This list is used to populate
         the dropdown menus where the user can select a task to assign an assignee or change its status.
 
-    assignees_from_query : list[str]
+    assignees_from_query : list[Assignee]
         A list of assignee names or identifiers obtained from a database query. This list is used to populate
         the dropdown menus where the user can select an assignee to assign to a task or set their salary.
 

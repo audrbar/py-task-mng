@@ -1,11 +1,13 @@
 """Delete Item Section."""
+from typing import List
 import streamlit as st
+from src.models import Project, Manager, Task, Assignee
 from utils.st_utils import header_section, delete_project, delete_manager, delete_task, delete_assignee
 
 
 def delete_item_section(
-        projects_from_query: list[str], managers_from_query: list[str], tasks_from_query: list[str],
-        assignees_from_query: list[str]
+        projects_from_query: List[Project], managers_from_query: List[Manager], tasks_from_query: List[Task],
+        assignees_from_query: List[Assignee]
 ) -> None:
     """Creates an interactive section in the Streamlit application for deleting various project-related items.
 
@@ -15,16 +17,16 @@ def delete_item_section(
     the selected item from the database.
 
     Parameters:
-    projects_from_query : list[str]
+    projects_from_query : list[Project]
         A list of project names or identifiers obtained from a database query. This list is used to populate
         the dropdown menu where the user can select a project to delete.
-    managers_from_query : list[str]
+    managers_from_query : list[Manager]
         A list of manager names or identifiers obtained from a database query. This list is used to populate
         the dropdown menu where the user can select a manager to delete.
-    tasks_from_query : list[str]
+    tasks_from_query : list[Task]
         A list of task names or identifiers obtained from a database query. This list is used to populate
         the dropdown menu where the user can select a task to delete.
-    assignees_from_query : list[str]
+    assignees_from_query : list[Assignee]
         A list of assignee names or identifiers obtained from a database query. This list is used to populate
         the dropdown menu where the user can select an assignee to delete.
 

@@ -17,5 +17,5 @@ repos:
     rev: v1.5.1
     hooks:
       - id: mypy
-        args: [--strict, --ignore-missing-imports]
+        args: [--strict, --ignore-missing-imports, --allow-untyped-decorators]
         additional_dependencies: ['types-requests', 'pandas-stubs']

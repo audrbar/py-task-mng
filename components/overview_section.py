@@ -1,6 +1,7 @@
 """This File Holds Overview Section."""
 import streamlit as st
-from sqlalchemy.orm import joinedload, Session
+from sqlalchemy import select
+from sqlalchemy.orm import Session
 
 from src.base import db_engine
 from src.models import Assignee, Project, Task, Manager
@@ -44,12 +45,10 @@ def overview_section(session: Session | Session) -> None:
     all_tasks = []
     all_assignees = []
     try:
-        all_projects = (session.query(Project).options(joinedload(Project.manager),
-                                                       joinedload(Project.tasks)).order_by(Project.id).all())
-        all_tasks = (session.query(Task).options(joinedload(Task.project),
-                                                 joinedload(Task.assignees)).order_by(Task.id).all())
-        all_assignees = session.query(Assignee).options(joinedload(Assignee.tasks)).order_by(Assignee.id).all()
-        all_managers = session.query(Manager).options(joinedload(Manager.project)).order_by(Manager.id).all()
+        all_projects = session.execute(select(Project).order_by(Project.id)).scalars().all()
+        all_tasks = session.execute(select(Task).order_by(Task.id)).scalars().all()
+        all_assignees = session.execute(select(Assignee).order_by(Assignee.id)).scalars().all()
+        all_managers = session.execute(select(Manager).order_by(Manager.id)).scalars().all()
     except Exception as e:
         session.rollback()
         print(f"Error: {e}")
@@ -62,3 +61,5 @@ def overview_section(session: Session | Session) -> None:
         tab2.dataframe(managers_to_df(all_managers), hide_index=True)
         tab3.dataframe(tasks_to_df(all_tasks), hide_index=True)
         tab4.dataframe(assignees_to_df(all_assignees), hide_index=True)
+    for project in all_projects:
+        st.write(project)

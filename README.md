@@ -18,35 +18,35 @@ and assignees.
 - Streamlit Interface: A user-friendly interface for interacting with the database.
 ## Installation
 1. Clone the Repository
-```
-git clone https://github.com/audrbar/py-task-mng.git
-cd py-task-mng
-```
+    ```
+    git clone https://github.com/audrbar/py-task-mng.git
+    cd py-task-mng
+    ```
 2. Create and Activate a Virtual Environment
-```
-python3 -m venv venv
-source venv/bin/activate
-```
-On Windows use
-```
-venv\Scripts\activate
-```
+    ```
+    python3 -m venv venv
+    source venv/bin/activate
+    ```
+    On Windows use
+    ```
+    venv\Scripts\activate
+    ```
 3. Install Dependencies
-```
-pip install -r requirements.txt
-```
+    ```
+    pip install -r requirements.txt
+    ```
 4. Set Up Environment Variables<br>Create a .env file in the root directory with the following content:<br>
-```
-dbname=your_db_name
-user=your_db_user
-password=your_db_password
-host=your_db_host
-port=your_db_port
-```
+    ```
+    dbname=your_db_name
+    user=your_db_user
+    password=your_db_password
+    host=your_db_host
+    port=your_db_port
+    ```
 5. Run the App:
-```
-streamlit run Home.py
-```
+    ```
+    streamlit run Home.py
+    ```
 ## Usage
 Open `db_seed.py` file, run `main()` function and type the number corresponding to the action you want to perform and
 press Enter:
@@ -73,9 +73,9 @@ no resources are left hanging.
 ## Data Sources
 For testing purposes the initial data set may be used:
 
-| File Name       | Source                                | Source Link                   |
-|-----------------|---------------------------------------|-------------------------------|
-| initial_data.py | Some Demo Data for Project Management | [LINK](./src/initial_data.py) |
+| File Name       | Source                                | Source Link                 |
+|-----------------|---------------------------------------|-----------------------------|
+| initial_data.py | Some Demo Data for Project Management | [LINK](./src/dummy_data.py) |
 ## Class Diagram
 Class Diagram was used to design the classes:
 ![Class Diagram](./img/class_diagram.png)
@@ -83,11 +83,31 @@ Class Diagram was used to design the classes:
 Database Diagram was used to design the database structure:
 ![Database Diagram](img/db_diagram.png)
 ## Running tests
-There are tests writen for connection testing in [test directory](./data/test_conn.py).
+There are tests writen for connection, functions and dataframe testing in [tests directory](./tests).
 You can run it in console by command:
-```
-python -m unittest discover -s tests
-```
+   ```
+   python -m unittest discover -s tests
+   ```
+or
+   ```
+   pytest
+   ```
+## Pre-Commit Hooks
+This project uses pre-commit hooks to enforce code quality and style guidelines before changes are committed.
+Trailing Whitespace Removal, End of File Fixer, YAML Syntax Check, Large File Check, Python Docstring Style Check,
+Static Type Checking with MyPy hooks are configured in [pre-commit-config.yaml](./.pre-commit-config.yaml) file.<br>
+To install and use these hooks, make sure you have pre-commit installed. You can install it via pip:
+   ```
+   pip install pre-commit
+   ```
+Then, set up the hooks by running:
+   ```
+   pre-commit install
+   ```
+To run pre-commit:
+   ```
+   pre-commit run --all-files
+   ```
 ## Project status
 Way forward:
 - Improve Error handling.

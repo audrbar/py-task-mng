@@ -1,9 +1,11 @@
 """This File Serves New Item Section for Add Item Page."""
+from typing import List
 import streamlit as st
+from src.models import Project, Assignee
 from utils.st_utils import header_section, add_new_project, add_new_task, add_new_assignee
 
 
-def add_section(projects_from_query: list[str], assignees_from_query: list[str]) -> None:
+def add_section(projects_from_query: List[Project], assignees_from_query: List[Assignee]) -> None:
     """Creates an interactive section in the Streamlit application for adding new items to the system.
 
     This function generates a UI section in a Streamlit app that allows users to add new projects,
@@ -12,11 +14,11 @@ def add_section(projects_from_query: list[str], assignees_from_query: list[str])
     to a project and an assignee, add a new assignee to the system.
 
     Parameters:
-    projects_from_query : list[str]
+    projects_from_query : list[Project]
         A list of project names or objects obtained from a database query. This list is used to
         populate the dropdown menu in the "add task" tab where the user can select a project
         to which the new task will be assigned.
-    assignees_from_query : list[str]
+    assignees_from_query : list[Assignee]
         A list of assignee names or objects obtained from a database query. This list is used to
         populate the dropdown menu in the "add task" tab where the user can select an assignee
         to assign to the new task.

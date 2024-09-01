@@ -24,7 +24,7 @@ def load_lottie_url(url: str) -> None | lto.st_lottie:
     return animation
 
 
-def make_a_list(source: list[Any]) -> list[Any]:
+def make_tasks_list(source: list[Task]) -> list[Any]:
     """Extracts and returns a list of elements from the second position in each record of a given list.
 
     This function processes a list of records (each represented as a list or tuple) and extracts
@@ -38,7 +38,50 @@ def make_a_list(source: list[Any]) -> list[Any]:
     """
     result = []
     for item in source:
-        result.append(item[1])
+        result.append(item.task_name)
+    return result
+
+
+def find_task_id(source: list[Task], selected_task: str) -> Any:
+    """Finds and returns the ID of a task from a list of records based on the task's name.
+
+    This function iterates through a list of records (each represented as a list or tuple),
+    where each record contains a project's ID and name. The function compares the task
+    name with the `selected_task` string. If a match is found, the function returns the
+    corresponding project's ID.
+
+    Parameters: source (list): A list of records, where each record is a list or tuple containing:
+                   - item.id: The ID of the task (int).
+                   - item.task_name: The name of the task (str).
+    selected_task (str): The name of the task to find.
+
+    Returns: int: The ID of the project if a match is found; otherwise, the function implicitly returns None
+         if no match is found.
+    """
+    for item in source:
+        if selected_task == item.task_name:
+            return item.id
+
+
+def make_projects_list(source: list[Project]) -> list[str]:
+    """Creates and returns a list of full names from a list of records.
+
+    This function processes a list of records (each represented as a list or tuple),
+    where each record contains a person's first name and last name. The function
+    concatenates the first name and last name to form the full name and adds it to
+    a result list.
+
+    Parameters: source (list): A list of records, where each record is a list or tuple containing:
+                   - item[1]: The first name of the person (str).
+                   - item[2]: The last name of the person (str).
+
+    Returns:
+    list: A list of full names, where each name is a concatenation of the first name
+          and last name from each record in the `source` list.
+    """
+    result = []
+    for item in source:
+        result.append(item.project_name)
     return result
 
 
@@ -59,8 +102,8 @@ def find_project_id(source: list[Project], selected_project: str) -> Any:
          if no match is found.
     """
     for item in source:
-        if selected_project == item[1]:
-            return item[0]
+        if selected_project == item.project_name:
+            return item.id
 
 
 def make_assignees_list(source: list[Assignee]) -> list[str]:
@@ -81,7 +124,7 @@ def make_assignees_list(source: list[Assignee]) -> list[str]:
     """
     result = []
     for item in source:
-        result.append(item[1] + ' ' + item[2])
+        result.append(item.firstname + ' ' + item.lastname)
     return result
 
 
@@ -103,7 +146,7 @@ def make_managers_list(source: list[Manager]) -> list[str]:
     """
     result = []
     for item in source:
-        result.append(item[1] + ' ' + item[2])
+        result.append(item.firstname + ' ' + item.lastname)
     return result
 
 
@@ -126,8 +169,8 @@ def find_person_id(source: list[Assignee], selected_person: str) -> Any:
          if no match is found.
     """
     for item in source:
-        if selected_person == (item[1] + ' ' + item[2]):
-            return item[0]
+        if selected_person == (item.firstname + ' ' + item.lastname):
+            return item.id
 
 
 def assignees_to_df(all_assignees: list[Assignee]) -> pd.DataFrame:
