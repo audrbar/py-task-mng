@@ -1,7 +1,6 @@
 """Deletes, Creates Database Tables and Feeds them with Dummy Data for Testing Purposes."""
 from typing import Any
 
-from sqlalchemy import text
 from sqlalchemy.exc import IntegrityError
 
 from src.base import db_engine, session, Model
@@ -14,11 +13,8 @@ def drop_tables() -> None:
 
     This function first reflects the existing database schema into SQLAlchemy's
     `Model.metadata`, allowing it to work with the current state of the database.
-    It then attempts to drop the 'projects' table using the `CASCADE` option, which
-    automatically drops any dependent objects such as foreign key constraints or related tables.
-
-    After attempting to drop the 'projects' table, the function calls `Model.metadata.drop_all()`
-    to drop all tables that are part of the current SQLAlchemy model metadata.
+    It then calls `Model.metadata.drop_all()` to drop all tables that are part of the current SQLAlchemy
+    model metadata.
 
     If any errors occur during the process, the function will roll back the current transaction
     to ensure the database remains in a consistent state.
@@ -34,12 +30,10 @@ def drop_tables() -> None:
     - Ensure that you have backups or are working in a development environment before
       running this function.
     """
-    Model.metadata.reflect(db_engine.engine)
     try:
-        # Drop the projects table with CASCADE
-        session.execute(text("DROP TABLE projects CASCADE"))
-        session.commit()
+        db_engine.close_session()
         Model.metadata.drop_all(db_engine.engine)
+        print("Success. All tables where dropped")
     except Exception as e:
         session.rollback()
         print(f"Error: {e}")

@@ -5,8 +5,9 @@ import streamlit as st
 from datetime import datetime
 from src.base import db_engine, session
 from src.models import Assignee, Project, Task, Manager, AssigneeTask
-from utils.utilities import (find_person_id, find_project_id, make_assignees_list, make_managers_list,
-                             load_lottie_url, assignees_to_chart, make_projects_list, make_tasks_list, find_task_id)
+from utils.utilities import (find_project_id, make_assignees_list, make_managers_list, load_lottie_url,
+                             assignees_to_chart, make_projects_list, make_tasks_list, find_task_id,
+                             find_manager_id, find_assignee_id)
 
 
 def page_config() -> None:
@@ -199,7 +200,7 @@ def assign_task_assignee(tasks_from_query: list[Task], assignees_from_query: lis
                                      index=None, placeholder="Select a task...")
         selected_assignee = st.selectbox('Select a Assignee to assign:', make_assignees_list(assignees_from_query),
                                          index=None, placeholder="Select a Assignee...")
-        selected_assignee_id = find_person_id(assignees_from_query, selected_assignee)
+        selected_assignee_id = find_assignee_id(assignees_from_query, selected_assignee)
         selected_task_id = find_task_id(tasks_from_query, selected_task)
         submit_button = st.form_submit_button(label='Submit')
         if submit_button:
@@ -264,7 +265,7 @@ def set_salary(assignees_from_query: list[Assignee]) -> None:
         selected_assignee = st.selectbox('Select a Assignee to assign:', make_assignees_list(assignees_from_query),
                                          index=None, placeholder="Select a assignee...")
         provided_salary = st.number_input('Provide salary value, $')
-        selected_assignee_id = find_person_id(assignees_from_query, selected_assignee)
+        selected_assignee_id = find_assignee_id(assignees_from_query, selected_assignee)
         submit_button = st.form_submit_button(label='Submit')
         if submit_button:
             session.query(Assignee).filter(Assignee.id == selected_assignee_id).update(
@@ -340,8 +341,6 @@ def add_new_task(assignees_from_query: list[Assignee], projects_from_query: list
         provided_task = st.text_input('Provide task name:')
         provided_start_date = st.date_input('Provide start date:', value=None, format="YYYY/MM/DD")
         provided_due_date = st.date_input('Provide due date:', value=None, format="YYYY/MM/DD")
-        selected_assignee = st.selectbox('Select a assignee:', make_assignees_list(assignees_from_query),
-                                         index=None, placeholder="Select a Assignee...")
         selected_project = st.selectbox('Select a Project task is for:', make_projects_list(projects_from_query),
                                         index=None, placeholder="Select a project...")
         selected_project_id = find_project_id(projects_from_query, selected_project)
@@ -350,11 +349,11 @@ def add_new_task(assignees_from_query: list[Assignee], projects_from_query: list
             task_to_add = Task(task_name=provided_task, start_date=provided_start_date,
                                due_date=provided_due_date, status="not_started",
                                project_id=selected_project_id)
+
             session.add(task_to_add)
             session.commit()
             db_engine.close_session()
-            st.write(f"The task _'{provided_task}'_ to the project {selected_project} "
-                     f"was created and assigned to _'{selected_assignee}'_.")
+            st.write(f"The task _'{provided_task}'_ to the project {selected_project} was created.")
         else:
             st.write('To succeed please select and fill inputs and smash a Submit button.')
 
@@ -415,7 +414,7 @@ def delete_project(projects_from_query: list[Project]) -> None:
             if project_to_delete:
                 try:
                     # Delete the project from the session and commit the transaction
-                    session.delete(project_to_delete)
+                    session.query(Project).filter(Project.id == selected_project_id).delete(synchronize_session='fetch')
                     session.commit()
                     st.write(f"The project _'{selected_project}'_ was successfully deleted.")
                 except Exception as e:
@@ -449,13 +448,13 @@ def delete_manager(managers_from_query: list[Manager]) -> None:
         st.write("Delete manager:")
         selected_manager = st.selectbox('Select a Manager to delete', make_managers_list(managers_from_query),
                                         index=None, placeholder="Select a manager...")
-        selected_manager_id = find_person_id(managers_from_query, selected_manager)
+        selected_manager_id = find_manager_id(managers_from_query, selected_manager)
         submit_button = st.form_submit_button(label='Submit')
         if submit_button:
             manager_to_delete = session.query(Manager).filter(Manager.id == selected_manager_id).first()
             if manager_to_delete:
                 try:
-                    session.delete(manager_to_delete)
+                    session.query(Manager).filter(Manager.id == selected_manager_id).delete(synchronize_session='fetch')
                     session.commit()
                     st.write(f"The manager _'{selected_manager}'_ was successfully deleted.")
                 except Exception as e:
@@ -495,7 +494,7 @@ def delete_task(tasks_from_query: list[Task]) -> None:
             task_to_delete = session.query(Task).filter(Task.id == selected_task_id).first()
             if task_to_delete:
                 try:
-                    session.delete(task_to_delete)
+                    session.query(Task).filter(Task.id == selected_task_id).delete(synchronize_session='fetch')
                     session.commit()
                     st.write(f"The task _'{selected_task}'_ was successfully deleted.")
                 except Exception as e:
@@ -529,13 +528,14 @@ def delete_assignee(assignees_from_query: list[Assignee]) -> None:
         st.write("Delete assignee:")
         selected_assignee = st.selectbox('Select a Assignee to delete', make_assignees_list(assignees_from_query),
                                          index=None, placeholder="Select a assignee...")
-        selected_assignee_id = find_person_id(assignees_from_query, selected_assignee)
+        selected_assignee_id = find_assignee_id(assignees_from_query, selected_assignee)
         submit_button = st.form_submit_button(label='Submit')
         if submit_button:
             assignee_to_delete = session.query(Assignee).filter(Assignee.id == selected_assignee_id).first()
             if assignee_to_delete:
                 try:
-                    session.delete(assignee_to_delete)
+                    session.query(Assignee).filter(Assignee.id == selected_assignee_id).delete(
+                        synchronize_session='fetch')
                     session.commit()
                     st.write(f"The assignee _'{selected_assignee}'_ was successfully deleted.")
                 except Exception as e:
