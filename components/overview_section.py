@@ -61,5 +61,3 @@ def overview_section(session: Session | Session) -> None:
         tab2.dataframe(managers_to_df(all_managers), hide_index=True)
         tab3.dataframe(tasks_to_df(all_tasks), hide_index=True)
         tab4.dataframe(assignees_to_df(all_assignees), hide_index=True)
-    for project in all_projects:
-        st.write(project)

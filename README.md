@@ -35,7 +35,7 @@ and assignees.
     ```
     pip install -r requirements.txt
     ```
-4. Set Up Environment Variables<br>Create a .env file in the root directory with the following content:<br>
+4. Set Up Environment Variables<br>Rename a `env.template` file to `.env` in the root directory with the following content:<br>
     ```
     dbname=your_db_name
     user=your_db_user
@@ -73,9 +73,9 @@ no resources are left hanging.
 ## Data Sources
 For testing purposes the initial data set may be used:
 
-| File Name       | Source                                | Source Link                 |
-|-----------------|---------------------------------------|-----------------------------|
-| initial_data.py | Some Demo Data for Project Management | [LINK](./src/dummy_data.py) |
+| File Name     | Source                                | Source Link                 |
+|---------------|---------------------------------------|-----------------------------|
+| dummy_data.py | Some Demo Data for Project Management | [LINK](./src/dummy_data.py) |
 ## Class Diagram
 Class Diagram was used to design the classes:
 ![Class Diagram](./img/class_diagram.png)

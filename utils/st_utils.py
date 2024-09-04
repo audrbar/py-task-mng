@@ -160,8 +160,8 @@ def edit_project_budget(projects_from_query: list[Project]) -> None:
     """
     with st.form('project_budget', clear_on_submit=True):
         st.write("Edit Project Budget:")
-        selected_project = st.selectbox('Select a Project task is for:',
-                                        make_projects_list(projects_from_query))
+        selected_project = st.selectbox('Select a Project task is for:', make_projects_list(projects_from_query),
+                                        index=None, placeholder="Select a project...", label_visibility="collapsed")
         provided_budget = st.number_input('Provide budget value, $')
         submit_button = st.form_submit_button(label='Submit')
         if submit_button:
@@ -195,9 +195,10 @@ def assign_task_assignee(tasks_from_query: list[Task], assignees_from_query: lis
     """
     with st.form('assign_assignee', clear_on_submit=True):
         st.write('Assign Task Assignee:')
-        selected_task = st.selectbox('Select a task to edit:', make_tasks_list(tasks_from_query))
-        selected_assignee = st.selectbox('Select a Assignee to assign:',
-                                         make_assignees_list(assignees_from_query))
+        selected_task = st.selectbox('Select a task to edit:', make_tasks_list(tasks_from_query),
+                                     index=None, placeholder="Select a task...")
+        selected_assignee = st.selectbox('Select a Assignee to assign:', make_assignees_list(assignees_from_query),
+                                         index=None, placeholder="Select a Assignee...")
         selected_assignee_id = find_person_id(assignees_from_query, selected_assignee)
         selected_task_id = find_task_id(tasks_from_query, selected_task)
         submit_button = st.form_submit_button(label='Submit')
@@ -228,8 +229,10 @@ def change_task_status(tasks_from_query: list[Task]) -> None:
     """
     with st.form('change_status', clear_on_submit=True):
         st.write('Change Task status:')
-        selected_task = st.selectbox('Select a task to edit:', make_tasks_list(tasks_from_query))
-        selected_status = st.selectbox('Select a Task status to set', ['not_started', 'in_progres', 'done'])
+        selected_task = st.selectbox('Select a task to edit:', make_tasks_list(tasks_from_query),
+                                     index=None, placeholder="Select task...")
+        selected_status = st.selectbox('Select a Task status to set', ['not_started', 'in_progres', 'done'],
+                                       index=None, placeholder="Select status...")
         submit_button = st.form_submit_button(label='Submit')
         if submit_button:
             session.query(Task).filter(Task.task_name == selected_task).update(
@@ -258,8 +261,8 @@ def set_salary(assignees_from_query: list[Assignee]) -> None:
     """
     with st.form('set_salary', clear_on_submit=True):
         st.write('Set Assignee salary:')
-        selected_assignee = st.selectbox('Select a Assignee to assign:',
-                                         make_assignees_list(assignees_from_query))
+        selected_assignee = st.selectbox('Select a Assignee to assign:', make_assignees_list(assignees_from_query),
+                                         index=None, placeholder="Select a assignee...")
         provided_salary = st.number_input('Provide salary value, $')
         selected_assignee_id = find_person_id(assignees_from_query, selected_assignee)
         submit_button = st.form_submit_button(label='Submit')
@@ -337,9 +340,10 @@ def add_new_task(assignees_from_query: list[Assignee], projects_from_query: list
         provided_task = st.text_input('Provide task name:')
         provided_start_date = st.date_input('Provide start date:', value=None, format="YYYY/MM/DD")
         provided_due_date = st.date_input('Provide due date:', value=None, format="YYYY/MM/DD")
-        selected_assignee = st.selectbox('Select a assignee:', make_assignees_list(assignees_from_query))
-        selected_project = st.selectbox('Select a Project task is for:',
-                                        make_projects_list(projects_from_query))
+        selected_assignee = st.selectbox('Select a assignee:', make_assignees_list(assignees_from_query),
+                                         index=None, placeholder="Select a Assignee...")
+        selected_project = st.selectbox('Select a Project task is for:', make_projects_list(projects_from_query),
+                                        index=None, placeholder="Select a project...")
         selected_project_id = find_project_id(projects_from_query, selected_project)
         submit_button = st.form_submit_button(label='Submit')
         if submit_button:
@@ -402,8 +406,8 @@ def delete_project(projects_from_query: list[Project]) -> None:
     """
     with st.form('delete_project', clear_on_submit=True):
         st.write("Delete Project:")
-        selected_project = st.selectbox('Select a Project to delete',
-                                        make_projects_list(projects_from_query))
+        selected_project = st.selectbox('Select a Project to delete', make_projects_list(projects_from_query),
+                                        index=None, placeholder="Select a project...")
         selected_project_id = find_project_id(projects_from_query, selected_project)
         submit_button = st.form_submit_button(label='Submit')
         if submit_button:
@@ -443,8 +447,8 @@ def delete_manager(managers_from_query: list[Manager]) -> None:
     """
     with st.form('delete_manager', clear_on_submit=True):
         st.write("Delete manager:")
-        selected_manager = st.selectbox('Select a Manager to delete',
-                                        make_managers_list(managers_from_query))
+        selected_manager = st.selectbox('Select a Manager to delete', make_managers_list(managers_from_query),
+                                        index=None, placeholder="Select a manager...")
         selected_manager_id = find_person_id(managers_from_query, selected_manager)
         submit_button = st.form_submit_button(label='Submit')
         if submit_button:
@@ -483,7 +487,8 @@ def delete_task(tasks_from_query: list[Task]) -> None:
     """
     with st.form('delete_task', clear_on_submit=True):
         st.write("Delete task:")
-        selected_task = st.selectbox('Select a Task to delete', make_tasks_list(tasks_from_query))
+        selected_task = st.selectbox('Select a Task to delete', make_tasks_list(tasks_from_query),
+                                     index=None, placeholder="Select a task...")
         selected_task_id = find_task_id(tasks_from_query, selected_task)
         submit_button = st.form_submit_button(label='Submit')
         if submit_button:
@@ -522,8 +527,8 @@ def delete_assignee(assignees_from_query: list[Assignee]) -> None:
     """
     with st.form('delete_assignee', clear_on_submit=True):
         st.write("Delete assignee:")
-        selected_assignee = st.selectbox('Select a Assignee to delete',
-                                         make_assignees_list(assignees_from_query))
+        selected_assignee = st.selectbox('Select a Assignee to delete', make_assignees_list(assignees_from_query),
+                                         index=None, placeholder="Select a assignee...")
         selected_assignee_id = find_person_id(assignees_from_query, selected_assignee)
         submit_button = st.form_submit_button(label='Submit')
         if submit_button:
