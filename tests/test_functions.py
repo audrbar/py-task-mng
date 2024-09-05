@@ -42,7 +42,7 @@ def test_make_assignees_list(test_assignees_list: List[Assignee]) -> None:
     assert result == ['Alice Brown', 'Charlie Davis']
 
 
-def test_find_person_id(test_assignees_list: List[Assignee]) -> None:
+def test_find_assignee_id(test_assignees_list: List[Assignee]) -> None:
     """Tests the find_person_id function to ensure it correctly identifies the person ID for a given full name.
 
     This test checks whether the find_person_id function correctly returns the ID of a person when provided
@@ -57,7 +57,7 @@ def test_find_person_id(test_assignees_list: List[Assignee]) -> None:
     Returns: None : This test function does not return any value. It asserts that the result of the find_person_id
     function matches the expected person ID.
     """
-    result = func_to_test.find_person_id(test_assignees_list, 'Alice Brown')
+    result = func_to_test.find_assignee_id(test_assignees_list, 'Alice Brown')
     assert result == 1
 
 

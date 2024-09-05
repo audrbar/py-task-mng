@@ -38,7 +38,8 @@ def make_tasks_list(source: list[Task]) -> list[Any]:
     """
     result = []
     for item in source:
-        result.append(item.task_name)
+        if item:
+            result.append(item.task_name)
     return result
 
 
@@ -128,6 +129,29 @@ def make_assignees_list(source: list[Assignee]) -> list[str]:
     return result
 
 
+def find_assignee_id(source: list[Assignee], selected_person: str) -> Any:
+    """Finds and returns the ID of a person from a list of records based on the person's full name.
+
+    This function iterates through a list of records (each represented as a list or tuple),
+    where each record contains a person's ID, first name, and last name. The function
+    concatenates the first name and last name to form the full name and compares it with
+    the `selected_person` string. If a match is found, the function returns the corresponding
+    person's ID.
+
+    Parameters: source (list): A list of records, where each record is a list or tuple containing:
+                   - item[0]: The ID of the person (int).
+                   - item[1]: The first name of the person (str).
+                   - item[2]: The last name of the person (str).
+    selected_person (str): The full name of the person to find, formatted as "FirstName LastName".
+
+    Returns: int: The ID of the person if a match is found; otherwise, the function implicitly returns None
+         if no match is found.
+    """
+    for item in source:
+        if selected_person == (item.firstname + ' ' + item.lastname):
+            return item.id
+
+
 def make_managers_list(source: list[Manager]) -> list[str]:
     """Creates and returns a list of full names from a list of records.
 
@@ -150,7 +174,7 @@ def make_managers_list(source: list[Manager]) -> list[str]:
     return result
 
 
-def find_person_id(source: list[Assignee], selected_person: str) -> Any:
+def find_manager_id(source: list[Manager], selected_person: str) -> Any:
     """Finds and returns the ID of a person from a list of records based on the person's full name.
 
     This function iterates through a list of records (each represented as a list or tuple),
