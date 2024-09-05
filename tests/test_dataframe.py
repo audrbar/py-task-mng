@@ -3,7 +3,7 @@ import pandas as pd
 from typing import List
 from src.models import Project
 from utils.utilities import projects_to_df
-from tests.test_functions import test_projects_list
+from tests.conftest import test_projects_list
 
 
 def test_projects_to_df(test_projects_list: List[Project]) -> None:
