@@ -2,8 +2,8 @@
 ![Hackage Dependencies](https://img.shields.io/hackage-deps/v/:packageName)
 # Project Management App
 ## Description
-This Project Management App is a simple web-based application built using Python, SQLAlchemy and Streamlit. The app
-allows users to manage projects, tasks, and assignees. It supports basic operations such as creating database tables,
+This Project Management App is a simple web-based application built using Python, PostgreSQL, SQLAlchemy and Streamlit.
+The app allows users to manage projects, tasks, and assignees. It supports basic operations such as creating database tables,
 seeding the database with initial data, and performing CRUD (Create, Read, Update, Delete) operations on the data
 using SQLAlchemy Object Relational Mapper. The app features one-to-one, one-to-many, and many-to-many relationships
 among the entities.
