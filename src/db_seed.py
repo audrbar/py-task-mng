@@ -61,7 +61,7 @@ def create_database() -> None:
     Model.metadata.create_all(db_engine.engine)
 
 
-def seed_database(projects_data: list[Any]) -> None:
+def seed_database(projects_data: list[dict[str, Any]]) -> None:
     """Populates the database with initial data for projects, managers, tasks, and assignees.
 
     This function iterates over a predefined list of project data and populates the database with `Manager`,
