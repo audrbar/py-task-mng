@@ -1,8 +1,9 @@
 """Utility Functions."""
+from typing import Union
+
 import streamlit_lottie as lto
 import requests
 import pandas as pd
-from typing import Any
 from src.models import Manager, Assignee, Project, Task
 
 
@@ -24,7 +25,7 @@ def load_lottie_url(url: str) -> None | lto.st_lottie:
     return animation
 
 
-def make_tasks_list(source: list[Task]) -> list[Any]:
+def make_tasks_list(source: list[Task]) -> list[str]:
     """Extracts and returns a list of elements from the second position in each record of a given list.
 
     This function processes a list of records (each represented as a list or tuple) and extracts
@@ -43,7 +44,7 @@ def make_tasks_list(source: list[Task]) -> list[Any]:
     return result
 
 
-def find_task_id(source: list[Task], selected_task: str) -> Any:
+def find_task_id(source: list[Task], selected_task: str) -> Union[Task.id, None]:
     """Finds and returns the ID of a task from a list of records based on the task's name.
 
     This function iterates through a list of records (each represented as a list or tuple),
@@ -62,6 +63,7 @@ def find_task_id(source: list[Task], selected_task: str) -> Any:
     for item in source:
         if selected_task == item.task_name:
             return item.id
+    return None
 
 
 def make_projects_list(source: list[Project]) -> list[str]:
@@ -86,7 +88,7 @@ def make_projects_list(source: list[Project]) -> list[str]:
     return result
 
 
-def find_project_id(source: list[Project], selected_project: str) -> Any:
+def find_project_id(source: list[Project], selected_project: str) -> Union[Project.id, None]:
     """Finds and returns the ID of a project from a list of records based on the project's name.
 
     This function iterates through a list of records (each represented as a list or tuple),
@@ -105,6 +107,7 @@ def find_project_id(source: list[Project], selected_project: str) -> Any:
     for item in source:
         if selected_project == item.project_name:
             return item.id
+    return None
 
 
 def make_assignees_list(source: list[Assignee]) -> list[str]:
@@ -129,7 +132,7 @@ def make_assignees_list(source: list[Assignee]) -> list[str]:
     return result
 
 
-def find_assignee_id(source: list[Assignee], selected_person: str) -> Any:
+def find_assignee_id(source: list[Assignee], selected_person: str) -> Union[Assignee.id, None]:
     """Finds and returns the ID of a person from a list of records based on the person's full name.
 
     This function iterates through a list of records (each represented as a list or tuple),
@@ -150,6 +153,7 @@ def find_assignee_id(source: list[Assignee], selected_person: str) -> Any:
     for item in source:
         if selected_person == (item.firstname + ' ' + item.lastname):
             return item.id
+    return None
 
 
 def make_managers_list(source: list[Manager]) -> list[str]:
@@ -174,7 +178,7 @@ def make_managers_list(source: list[Manager]) -> list[str]:
     return result
 
 
-def find_manager_id(source: list[Manager], selected_person: str) -> Any:
+def find_manager_id(source: list[Manager], selected_person: str) -> Union[Manager.id, None]:
     """Finds and returns the ID of a person from a list of records based on the person's full name.
 
     This function iterates through a list of records (each represented as a list or tuple),
@@ -195,6 +199,7 @@ def find_manager_id(source: list[Manager], selected_person: str) -> Any:
     for item in source:
         if selected_person == (item.firstname + ' ' + item.lastname):
             return item.id
+    return None
 
 
 def assignees_to_df(all_assignees: list[Assignee]) -> pd.DataFrame:
